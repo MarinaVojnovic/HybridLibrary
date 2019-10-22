@@ -23,6 +23,10 @@ public class Library {
     public Library() {
     }
 
+    public Library(Library library){
+        this.id=library.id;
+    }
+
     public Long getId() {
         return id;
     }

@@ -47,6 +47,15 @@ public class Book {
         //this.book_instances = book_instances;
     }
 
+    public Book(Book book){
+        this.id = book.id;
+        this.isbn = book.isbn;
+        this.name = book.name;
+        this.author = book.author;
+        this.image = book.image;
+        this.rentingCounter=book.rentingCounter;
+    }
+
     public Long getId() {
         return id;
     }

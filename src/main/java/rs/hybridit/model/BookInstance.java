@@ -29,6 +29,13 @@ public class BookInstance {
        // this.book = book;
     }
 
+    public BookInstance(BookInstance bookInstance){
+        this.id=bookInstance.id;
+        this.rentStart=bookInstance.rentStart;
+        this.rent_end=bookInstance.rent_end;
+
+    }
+
     public Long getId() {
         return id;
     }
