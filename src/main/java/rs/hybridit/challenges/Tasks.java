@@ -37,6 +37,6 @@ interface Tasks {
     /*
         Find all pairs from the array where the sum is equal to the given sum
     */
-    Object findAllPairsInsideArrayWithGivenSum(int[] array, int sum);
+    Object findAllPairsInsideAvrrayWithGienSum(int[] array, int sum);
 
 }
