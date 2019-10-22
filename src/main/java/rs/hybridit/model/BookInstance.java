@@ -15,18 +15,18 @@ public class BookInstance {
 
     @Column(name = "rent_end")
     private Date rent_end;
-/*
+
     @ManyToOne(fetch = FetchType.EAGER)
     Book book;
-*/
+
     public BookInstance() {
     }
 
-    public BookInstance(Long id, Date rentStart, Date rent_end/*, Book book*/) {
+    public BookInstance(Long id, Date rentStart, Date rent_end, Book book) {
         this.id = id;
         this.rentStart = rentStart;
         this.rent_end = rent_end;
-       // this.book = book;
+        this.book = book;
     }
 
     public BookInstance(BookInstance bookInstance){
@@ -59,7 +59,7 @@ public class BookInstance {
     public void setRent_end(Date rent_end) {
         this.rent_end = rent_end;
     }
-/*
+
     public Book getBook() {
         return book;
     }
@@ -68,5 +68,5 @@ public class BookInstance {
         this.book = book;
     }
 
- */
+
 }

@@ -29,22 +29,22 @@ public class Book {
 
     @Column(name = "renting_counter")
     private Integer rentingCounter;
-/*
+
     @JsonIgnore
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private Set<BookInstance> book_instances = new HashSet<>();
-*/
+
     public Book() {
     }
 
-    public Book(Long id, Integer isbn, String name, String author, String image, Integer rentingCounter/*, Set<BookInstance> book_instances */) {
+    public Book(Long id, Integer isbn, String name, String author, String image, Integer rentingCounter, Set<BookInstance> book_instances) {
         this.id = id;
         this.isbn = isbn;
         this.name = name;
         this.author = author;
         this.image = image;
         this.rentingCounter = rentingCounter;
-        //this.book_instances = book_instances;
+        this.book_instances = book_instances;
     }
 
     public Book(Book book){
@@ -103,7 +103,7 @@ public class Book {
     public void setRentingCounter(Integer rentingCounter) {
         this.rentingCounter = rentingCounter;
     }
-/*
+
     public Set<BookInstance> getBook_instances() {
         return book_instances;
     }
@@ -111,6 +111,6 @@ public class Book {
     public void setBook_instances(Set<BookInstance> book_instances) {
         this.book_instances = book_instances;
     }
-    */
+
 
 }
