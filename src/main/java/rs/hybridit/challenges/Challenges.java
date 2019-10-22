@@ -7,6 +7,7 @@ class Challenges implements Tasks {
     @Override
     public boolean checkIfStringIsAPalindrome(String text) {
         boolean result = true;
+
         for (int i = 0; i <text.length()/2; i++){
             if (text.charAt(i) != text.charAt(text.length()-1-i)){
                 result = false;
@@ -14,13 +15,13 @@ class Challenges implements Tasks {
             }
         }
 
-
         return result;
     }
 
     @Override
     public String findDuplicateCharacters(String text) {
         HashMap<Character, Integer> map = new HashMap<Character, Integer>();
+
         for (int i = 0;i < text.length(); i++){
             Character letter = text.charAt(i);
             if (map.containsKey(letter)){
@@ -35,6 +36,7 @@ class Challenges implements Tasks {
                 result += k;
             }
         }
+
         return result;
     }
 
@@ -63,6 +65,7 @@ class Challenges implements Tasks {
     public Set<Integer> findMissingNumberInArray(int[] numbers, int count) {
         Set<Integer> missingNumbers = new HashSet<Integer>();
         int position = 0;
+
         for (int i=1; i <count + 1; i++){
             if (numbers[position]!=i){
                 missingNumbers.add(i);
@@ -76,22 +79,16 @@ class Challenges implements Tasks {
 
     @Override
     public List<String> findAllPairsInsideAvrrayWithGienSum(int[] array, int sum) {
-
-
         List<String> pairs = new ArrayList<>();
 
-        for (int i = 0; i < array.length-1; i++){
-            for (int j=i+1; j < array.length; j++){
-                if (array[i]+array[j] ==sum){
-                    pairs.add(array[i]+"+"+array[j]);
+        for (int i = 0; i < array.length-1; i++) {
+            for (int j = i + 1; j < array.length; j++) {
+                if (array[i] + array[j] == sum) {
+                    pairs.add(array[i] + "+" + array[j]);
 
                 }
             }
         }
-
-
-
-
 
         return pairs;
     }

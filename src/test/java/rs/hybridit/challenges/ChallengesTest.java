@@ -31,11 +31,6 @@ public class ChallengesTest {
 
     @Test
     public void checkIfStringIsAPalindrome_notAPalindromeIsProvidedAsInput_valueIsConfirmedToNotBeAPalindrome() {
-        /*
-        isTrue(challenges.checkIfStringIsAPalindrome("abc"), "I expected a value which is not palindrome but result doesn't match my expectations!");
-        isTrue(challenges.checkIfStringIsAPalindrome("cba"), "I expected a value which is not palindrome but result doesn't match my expectations!");
-        isTrue(challenges.checkIfStringIsAPalindrome("edf"), "I expected a value which is not palindrome but result doesn't match my expectations!");
-        */
 
         Assert.assertFalse(challenges.checkIfStringIsAPalindrome("abc"));
         Assert.assertFalse(challenges.checkIfStringIsAPalindrome("cba"));
@@ -70,13 +65,11 @@ public class ChallengesTest {
         arr1[2] = 3;
         arr1[3] = 5;
 
-
         Set<Integer> arr1Res = new HashSet<Integer>();
         arr1Res.add(4);
 
         // when
         Object object = challenges.findMissingNumberInArray(arr1, 5);
-
 
         // then
         assertThat(object).isEqualTo(arr1Res);
@@ -102,7 +95,6 @@ public class ChallengesTest {
         int[] arr3 = {1, 2, 3, 4, 5};
         Set<Integer> arr3Res = new HashSet<Integer>();
 
-
         //when
         Object object3 = challenges.findMissingNumberInArray(arr3, 5);
 
@@ -119,18 +111,11 @@ public class ChallengesTest {
         int[] arr1 = {1, 2, 3};
         ArrayList arr1Res = new ArrayList<>();
         arr1Res.add("2+3");
-        /*
-        arr1Res.add(new int[]{2, 3});
-         */
-
 
         //when
         Object object = challenges.findAllPairsInsideAvrrayWithGienSum(arr1, 5);
 
         //then
-
-        //Assert.assertEquals(object.toString(), arr1Res.toString());
-        //assertThat(object).(new int[]{2, 3});
         assertThat(object).isEqualTo(arr1Res);
 
 
@@ -141,13 +126,10 @@ public class ChallengesTest {
         arr2Res.add("2+4");
         arr2Res.add("3+3");
 
-        //int[][] arr2Res = {{2, 4}, {1, 2, 3}};
-
         //when
         Object object2 = challenges.findAllPairsInsideAvrrayWithGienSum(arr2, 6);
 
         //then
-        //assertThat(object2).isEqualToComparingFieldByField(Arrays.asList(arr2Res));
         assertThat(object2).isEqualTo(arr2Res);
 
 
