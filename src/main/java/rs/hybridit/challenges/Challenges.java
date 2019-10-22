@@ -19,27 +19,27 @@ class Challenges implements Tasks {
     }
 
     @Override
-    public Object findDuplicateCharacters(String text) {
-        HashMap<Character, Integer> mapa = new HashMap<Character, Integer>();
+    public String findDuplicateCharacters(String text) {
+        HashMap<Character, Integer> map = new HashMap<Character, Integer>();
         for (int i = 0;i < text.length(); i++){
-            Character slovo = text.charAt(i);
-            if (mapa.containsKey(slovo)){
-                mapa.replace(slovo, mapa.get(slovo)+1);
+            Character letter = text.charAt(i);
+            if (map.containsKey(letter)){
+                map.replace(letter, map.get(letter)+1);
             }else {
-                mapa.put(slovo, 1);
+                map.put(letter, 1);
             }
         }
-        String rezultat="";
-        for (Character k : mapa.keySet()){
-            if (mapa.get(k) > 1){
-                rezultat += k;
+        String result="";
+        for (Character k : map.keySet()){
+            if (map.get(k) > 1){
+                result += k;
             }
         }
-        return rezultat;
+        return result;
     }
 
     @Override
-    public Object findFirstNonRepeatedCharacter(String text) {
+    public String findFirstNonRepeatedCharacter(String text) {
         LinkedList<String> unrepeated = new LinkedList<String>();
         LinkedHashSet<String> repeated = new LinkedHashSet<String>();
 
@@ -54,14 +54,14 @@ class Challenges implements Tasks {
         if (unrepeated.size() > 0){
             return unrepeated.get(0);
         }else{
-            return null;
+            return "";
         }
 
     }
 
     @Override
-    public Object findMissingNumberInArray(int[] numbers, int count) {
-        ArrayList<Integer> missingNumbers = new ArrayList<Integer>();
+    public Set<Integer> findMissingNumberInArray(int[] numbers, int count) {
+        Set<Integer> missingNumbers = new HashSet<Integer>();
         int position = 0;
         for (int i=1; i <count + 1; i++){
             if (numbers[position]!=i){
@@ -75,7 +75,7 @@ class Challenges implements Tasks {
     }
 
     @Override
-    public Object findAllPairsInsideAvrrayWithGienSum(int[] array, int sum) {
+    public List<String> findAllPairsInsideAvrrayWithGienSum(int[] array, int sum) {
 
 
         List<String> pairs = new ArrayList<>();

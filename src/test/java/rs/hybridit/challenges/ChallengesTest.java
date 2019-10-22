@@ -8,6 +8,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.util.Assert.isTrue;
@@ -54,7 +56,7 @@ public class ChallengesTest {
     public void findFirstNonRepeatedCharacterTest() {
         Assert.assertEquals(challenges.findFirstNonRepeatedCharacter("Marina"), "m");
         Assert.assertEquals(challenges.findFirstNonRepeatedCharacter("aaaamMarina"), "r");
-        Assert.assertEquals(challenges.findFirstNonRepeatedCharacter("aaabbb"), null);
+        Assert.assertEquals(challenges.findFirstNonRepeatedCharacter("aaabbb"), "");
     }
 
 
@@ -69,7 +71,7 @@ public class ChallengesTest {
         arr1[3] = 5;
 
 
-        ArrayList<Integer> arr1Res = new ArrayList<Integer>();
+        Set<Integer> arr1Res = new HashSet<Integer>();
         arr1Res.add(4);
 
         // when
@@ -83,7 +85,7 @@ public class ChallengesTest {
         //test2
         //given
         int[] arr2 = {1, 5, 6, 7, 8, 9, 10};
-        ArrayList<Integer> arr2Res= new ArrayList<Integer>();
+        Set<Integer> arr2Res = new HashSet<Integer>();
         arr2Res.add(2);
         arr2Res.add(3);
         arr2Res.add(4);
@@ -98,7 +100,7 @@ public class ChallengesTest {
         //test3
         //given
         int[] arr3 = {1, 2, 3, 4, 5};
-        ArrayList<Integer> arr3Res= new ArrayList<Integer>();
+        Set<Integer> arr3Res = new HashSet<Integer>();
 
 
         //when
@@ -107,11 +109,11 @@ public class ChallengesTest {
         //then
         assertThat(object3).isEqualTo(arr3Res);
 
-}
+    }
 
 
     @Test
-    public void findAllPairsInsideAvrrayWithGienSumTest(){
+    public void findAllPairsInsideAvrrayWithGienSumTest() {
         //test 1
         //given
         int[] arr1 = {1, 2, 3};
@@ -132,7 +134,6 @@ public class ChallengesTest {
         assertThat(object).isEqualTo(arr1Res);
 
 
-
         //test 2
         //given
         int[] arr2 = {1, 2, 3, 4, 3};
@@ -150,7 +151,7 @@ public class ChallengesTest {
         assertThat(object2).isEqualTo(arr2Res);
 
 
-       //test3
+        //test3
         //given
         int[] arr3 = {1, 2, 3};
         ArrayList<Integer> arr3Res = new ArrayList<Integer>();
@@ -162,11 +163,7 @@ public class ChallengesTest {
         assertThat(object3).isEqualTo(arr3Res);
 
 
-
     }
-
-
-
 
 
 }
