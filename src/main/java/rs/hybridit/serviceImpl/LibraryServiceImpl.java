@@ -11,8 +11,14 @@ import java.util.List;
 
 @Service
 public class LibraryServiceImpl implements LibraryService {
-    @Autowired
-    LibraryRepository libraryRepository;
+    
+    private final LibraryRepository libraryRepository;
+
+    public LibraryServiceImpl(LibraryRepository libraryRepository) {
+
+        this.libraryRepository = libraryRepository;
+
+    }
 
     @Override
     public Library getOne(long id) {
