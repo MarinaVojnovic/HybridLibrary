@@ -36,6 +36,7 @@ I want to have an application that will help me manage books in my library. The 
 * Work is organized on Kanban board, all tickets start in "to do" and are progressed to "in progress" and finally into "review"
 * Each ticket must be on a separate branch, after work is done, ticket is moved into "review", pull request is created and is accepted by product owners (mentors)
 * Ticket is moved to "done" by mentors after review is finished, and the code is approved. When ticket is moved to "done" the pull request is merged.
+* !!! Tickets can't go into "review" without tests !!!
 
 ### Resources
 
