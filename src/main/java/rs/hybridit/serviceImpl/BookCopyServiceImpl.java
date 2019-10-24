@@ -10,14 +10,14 @@ import rs.hybridit.service.BookCopyService;
 @Service
 public class BookCopyServiceImpl implements BookCopyService {
 
-	private BookCopyRepository bookCopyRepository;
+	private final BookCopyRepository bookCopyRepository;
 
 	public BookCopyServiceImpl(BookCopyRepository bookCopyRepository) {
 		this.bookCopyRepository = bookCopyRepository;
 	}
 
 	@Override
-	public BookCopy getOne(long id) {
+	public BookCopy findById(long id) {
 		return bookCopyRepository.getOne(id);
 	}
 

@@ -5,7 +5,7 @@ import rs.hybridit.model.BookCopy;
 
 public interface BookCopyService {
 
-	BookCopy getOne(long id);
+	BookCopy findById(long id);
 
 	List<BookCopy> getAll();
 

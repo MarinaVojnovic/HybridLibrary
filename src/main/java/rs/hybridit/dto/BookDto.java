@@ -16,19 +16,17 @@ public class BookDto {
 	@ISBN
 	private String isbn;
 
-	@Size(min = 3, max = 15, message="Length of name must be between 3 and 15.")
+	@Size(min = 3, max = 15, message = "Length of name must be between 3 and 15.")
 	@NotBlank(message = "Name is not allowed to be empty.")
-	@NotNull(message = "Name is not allowed to be empty.")
 	private String name;
 
 	@Size(min = 3, max = 25, message = "Length of author's name must be between 3 and 15.")
 	@NotBlank(message = "Author is not allowed to be empty.")
-	@NotNull(message = "Author is not allowed to be empty.")
 	private String author;
 
 	private String image;
 
-	@Min(value = 0, message="Value of renting counter must be greater or equal 0.")
+	@Min(value = 0, message = "Value of renting counter must be greater or equal 0.")
 	private Integer rentingCounter;
 
 	private Set<BookCopy> bookCopies = new HashSet<BookCopy>();

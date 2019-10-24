@@ -4,6 +4,7 @@ package rs.hybridit.controller;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,28 +31,34 @@ public class BookController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.CREATED)
-	public Book create(@RequestBody BookDto bookDto) {
-		return bookService.create(new Book(bookDto));
+	public ResponseEntity<?> create(@RequestBody BookDto bookDto) {
+		Book book = bookService.create(new Book(bookDto));
+		return new ResponseEntity<>(book, HttpStatus.CREATED);
 	}
 
 	@GetMapping(value = "/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public Book getBook(@PathVariable Long id) {
-		Book book = bookService.getOne(id);
-		return book;
+	public ResponseEntity<?> getBook(@PathVariable Long id) {
+		Book book = bookService.findById(id);
+		if (book != null) {
+			return new ResponseEntity<>(book, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@GetMapping
-	@ResponseStatus(HttpStatus.OK)
-	public List<Book> getBooks() {
-		return bookService.getAll();
+	public ResponseEntity<?> getBooks() {
+		List<Book> books = bookService.getAll();
+		if (books != null) {
+			return new ResponseEntity<>(books, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.OK)
-	public Book updateBook(@PathVariable Long id, @RequestBody BookDto bookDto) {
-		Book book = bookService.getOne(id);
+	public ResponseEntity<?> updateBook(@PathVariable Long id, @RequestBody BookDto bookDto) {
+		Book book = bookService.findById(id);
 		if (book != null) {
 			book.setName(bookDto.getName());
 			book.setAuthor(bookDto.getAuthor());
@@ -59,16 +66,20 @@ public class BookController {
 			book.setRentingCounter(bookDto.getRentingCounter());
 			book.setImage(bookDto.getImage());
 			book.setBookCopies(bookDto.getBookCopies());
+			return new ResponseEntity<>(book, HttpStatus.OK);
 		}
-		return book;
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 
 	@DeleteMapping(value = "/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public Book deleteBook(@PathVariable Long id) {
-		Book book = bookService.getOne(id);
-		bookService.delete(book);
-		return book;
+	public ResponseEntity<?> deleteBook(@PathVariable Long id) {
+		Book book = bookService.findById(id);
+		if (book != null) {
+			bookService.delete(book);
+			return new ResponseEntity<>(book, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
 	}
 
 }

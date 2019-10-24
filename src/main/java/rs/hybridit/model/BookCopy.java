@@ -1,10 +1,12 @@
 package rs.hybridit.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -15,12 +17,12 @@ import rs.hybridit.dto.BookCopyDto;
 public class BookCopy {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private Date rentStart;
+	private LocalDate rentStart;
 
-	private Date rentEnd;
+	private LocalDate rentEnd;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Book book;
@@ -28,7 +30,7 @@ public class BookCopy {
 	public BookCopy() {
 	}
 
-	public BookCopy(Long id, Date rentStart, Date rent_end, Book book) {
+	public BookCopy(Long id, LocalDate rentStart, LocalDate rentEnd, Book book) {
 		this.id = id;
 		this.rentStart = rentStart;
 		this.rentEnd = rentEnd;
@@ -50,19 +52,19 @@ public class BookCopy {
 		this.id = id;
 	}
 
-	public Date getRentStart() {
+	public LocalDate getRentStart() {
 		return rentStart;
 	}
 
-	public void setRentStart(Date rentStart) {
+	public void setRentStart(LocalDate rentStart) {
 		this.rentStart = rentStart;
 	}
 
-	public Date getRentEnd() {
+	public LocalDate getRentEnd() {
 		return rentEnd;
 	}
 
-	public void setRentEnd(Date rent_end) {
+	public void setRentEnd(LocalDate rentEnd) {
 		this.rentEnd = rentEnd;
 	}
 

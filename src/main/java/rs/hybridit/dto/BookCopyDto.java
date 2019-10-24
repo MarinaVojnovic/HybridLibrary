@@ -1,20 +1,21 @@
 package rs.hybridit.dto;
 
+import java.time.LocalDate;
 import java.util.Date;
 import rs.hybridit.model.Book;
 
 public class BookCopyDto {
 
 	private Long id;
-	private Date rentStart;
-	private Date rentEnd;
+	private LocalDate rentStart;
+	private LocalDate rentEnd;
 	private Book book;
 
-	public BookCopyDto(){
+	public BookCopyDto() {
 
 	}
 
-	public BookCopyDto(Long id, Date rentStart, Date rentEnd, Book book) {
+	public BookCopyDto(Long id, LocalDate rentStart, LocalDate rentEnd, Book book) {
 		this.id = id;
 		this.rentStart = rentStart;
 		this.rentEnd = rentEnd;
@@ -29,19 +30,19 @@ public class BookCopyDto {
 		this.id = id;
 	}
 
-	public Date getRentStart() {
+	public LocalDate getRentStart() {
 		return rentStart;
 	}
 
-	public void setRentStart(Date rentStart) {
+	public void setRentStart(LocalDate rentStart) {
 		this.rentStart = rentStart;
 	}
 
-	public Date getRentEnd() {
+	public LocalDate getRentEnd() {
 		return rentEnd;
 	}
 
-	public void setRentEnd(Date rentEnd) {
+	public void setRentEnd(LocalDate rentEnd) {
 		this.rentEnd = rentEnd;
 	}
 

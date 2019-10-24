@@ -29,41 +29,52 @@ public class LibraryController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.CREATED)
-	public Library create(@RequestBody LibraryDto libraryDto) {
-		return libraryService.create(new Library(libraryDto));
+	public ResponseEntity<?> create(@RequestBody LibraryDto libraryDto) {
+		Library library = libraryService.create(new Library(libraryDto));
+		return new ResponseEntity<>(library, HttpStatus.CREATED);
 	}
 
 	@GetMapping(value = "/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public Library getLibrary(@PathVariable Long id) {
+	public ResponseEntity<?> getLibrary(@PathVariable Long id) {
 		Library library = libraryService.getOne(id);
-		return library;
+		if (library != null) {
+			return new ResponseEntity<>(library, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+
 	}
 
 	@GetMapping
-	@ResponseStatus(HttpStatus.OK)
-	public List<Library> getLibraries() {
-		return libraryService.getAll();
+	public ResponseEntity<?> getLibraries() {
+		List<Library> libraries = libraryService.getAll();
+		if (libraries != null) {
+			return new ResponseEntity<>(libraries, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.OK)
-	public Library updateLibrary(@PathVariable Long id, @RequestBody LibraryDto libraryDto) {
+	public ResponseEntity<?> updateLibrary(@PathVariable Long id, @RequestBody LibraryDto libraryDto) {
 		Library library = libraryService.getOne(id);
 		if (library != null) {
 			library.setRentPeriod(libraryDto.getRentPeriod());
+			return new ResponseEntity<>(library, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
-		return library;
 	}
 
 	@DeleteMapping(value = "/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public Library deleteLibrary(@PathVariable Long id) {
+	public ResponseEntity<?> deleteLibrary(@PathVariable Long id) {
 		Library library = libraryService.getOne(id);
-		libraryService.delete(library);
-		return library;
+		if (library != null) {
+			libraryService.delete(library);
+			return new ResponseEntity<>(library, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
 	}
-
 
 }

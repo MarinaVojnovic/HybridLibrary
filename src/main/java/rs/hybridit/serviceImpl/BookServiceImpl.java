@@ -11,14 +11,14 @@ import rs.hybridit.service.BookService;
 @Service
 public class BookServiceImpl implements BookService {
 
-	private BookRepository bookRepository;
+	private final BookRepository bookRepository;
 
 	public BookServiceImpl(BookRepository bookRepository) {
 		this.bookRepository = bookRepository;
 	}
 
 	@Override
-	public Book getOne(long id) {
+	public Book findById(long id) {
 		return bookRepository.getOne(id);
 	}
 

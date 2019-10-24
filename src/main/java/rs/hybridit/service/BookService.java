@@ -5,7 +5,7 @@ import rs.hybridit.model.Book;
 
 public interface BookService {
 
-	Book getOne(long id);
+	Book findById(long id);
 
 	List<Book> getAll();
 

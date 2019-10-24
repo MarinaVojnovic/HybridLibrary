@@ -29,12 +29,10 @@ public class Book {
 
 	@Size(min = 3, max = 15, message = "Length of name must be between 3 and 15.")
 	@NotBlank(message = "Name is not allowed to be empty.")
-	@NotNull(message = "Name is not allowed to be empty.")
 	private String name;
 
 	@Size(min = 3, max = 25, message = "Length of author's name must be between 3 and 15.")
 	@NotBlank(message = "Author is not allowed to be empty.")
-	@NotNull(message = "Author is not allowed to be empty.")
 	private String author;
 
 	private String image;
