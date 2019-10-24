@@ -28,7 +28,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ControllerTest {
+public class LibraryControllerTest {
 
 	@InjectMocks
 	private LibraryController libraryController;
@@ -65,11 +65,10 @@ public class ControllerTest {
 
 	@Test
 	public void deleteLibrary_NonExistingIdGiven_ShouldReturnNull() {
-		Library library = libraryController.getLibrary(1L);
+		Library library = libraryController.deleteLibrary(1L);
 		verify(libraryService).getOne(1L);
 		assertEquals(null, library);
 	}
-
 
 	@Test
 	public void updateLibrary_NonExistingIdGiven_ShouldReturnNull() {
