@@ -6,4 +6,5 @@ import rs.hybridit.model.Library;
 
 @Repository
 public interface LibraryRepository extends JpaRepository<Library, Long> {
+
 }

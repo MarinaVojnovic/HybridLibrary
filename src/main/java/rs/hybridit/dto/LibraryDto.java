@@ -10,10 +10,10 @@ public class LibraryDto {
 
 	private Long id;
 
-	private Integer rentPeriod;
-
 	@Min(value = 1, message = "Minimum value is 1.")
 	@Max(value = 20, message = "Maximum value is 20.")
+	private Integer rentPeriod;
+
 	public LibraryDto() {
 	}
 

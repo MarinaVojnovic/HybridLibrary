@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import rs.hybridit.dto.LibraryDto;
@@ -18,45 +19,46 @@ import rs.hybridit.model.Library;
 import rs.hybridit.service.LibraryService;
 
 @RestController
+@RequestMapping(value = "/libraries", produces = MediaType.APPLICATION_JSON_VALUE)
 public class LibraryController {
 
-	private final LibraryService libraryService;
+	private LibraryService libraryService;
 
 	public LibraryController(LibraryService libraryService) {
 		this.libraryService = libraryService;
 	}
 
-	@PostMapping(value = "/createLibrary", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.CREATED)
 	public Library create(@RequestBody LibraryDto libraryDto) {
 		return libraryService.create(new Library(libraryDto));
-
 	}
-	@GetMapping(value = "/getLibrary/{id}")
-    @ResponseStatus(HttpStatus.OK)
+
+	@GetMapping(value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
 	public Library getLibrary(@PathVariable Long id) {
 		Library library = libraryService.getOne(id);
 		return library;
 	}
 
-    @GetMapping("/libraries")
-    public List<Library> getLibraries() {
-        return libraryService.getAll();
-    }
+	@GetMapping
+	@ResponseStatus(HttpStatus.OK)
+	public List<Library> getLibraries() {
+		return libraryService.getAll();
+	}
 
-	@PutMapping(value = "/updateLibrary", consumes = MediaType.APPLICATION_JSON_VALUE, produces =
-        MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-	public Library updateLibrary(@RequestBody LibraryDto libraryDto) {
-		Library library = libraryService.getOne(libraryDto.getId());
+	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public Library updateLibrary(@PathVariable Long id, @RequestBody LibraryDto libraryDto) {
+		Library library = libraryService.getOne(id);
 		if (library != null) {
-            library.setRentPeriod(libraryDto.getRentPeriod());
+			library.setRentPeriod(libraryDto.getRentPeriod());
 		}
 		return library;
 	}
 
-	@DeleteMapping(value = "/deleteLibrary/{id}")
-    @ResponseStatus(HttpStatus.OK)
+	@DeleteMapping(value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
 	public Library deleteLibrary(@PathVariable Long id) {
 		Library library = libraryService.getOne(id);
 		libraryService.delete(library);

@@ -30,122 +30,86 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ControllerTest {
 
+	@InjectMocks
 	private LibraryController libraryController;
 
 	@Mock
 	private LibraryService libraryService;
 
-	@Before
-	public void init() {
-		libraryController = new LibraryController(libraryService);
-	}
-
 	@Test
-	public void getLibrary_ExistingIdGiven_ShouldBeSuccessfull()
-
-	{
+	public void getLibrary_ExistingIdGiven_ShouldBeSuccessfull() {
 		Library l = new Library();
 		l.setId(1L);
 		when(libraryService.getOne(1L)).thenReturn(l);
-
 		Library library = libraryController.getLibrary(1L);
-
-		verify(libraryService).getOne(1l);
-
-		//assertEquals(1l, user.getId().longValue());
-		assertEquals(1l, library.getId().longValue());
+		verify(libraryService).getOne(1L);
+		assertEquals(1L, library.getId().longValue());
 	}
 
 	@Test
-	public void getLibrary_NonExistingIdGiven_ShouldReturnNull()
-
-	{
+	public void getLibrary_NonExistingIdGiven_ShouldReturnNull() {
 		Library library = libraryController.getLibrary(1L);
-		verify(libraryService).getOne(1l);
+		verify(libraryService).getOne(1L);
 		assertEquals(null, library);
 	}
 
-
 	@Test
-	public void deleteLibrary_ExistingIdGiven_ShouldBeSuccessfull()
-
-	{
+	public void deleteLibrary_ExistingIdGiven_ShouldBeSuccessfull() {
 		Library l = new Library();
 		l.setId(1L);
 		when(libraryService.getOne(1L)).thenReturn(l);
-
 		Library library = libraryController.deleteLibrary(1L);
-
-		verify(libraryService).getOne(1l);
-		assertEquals(1l, library.getId().longValue());
+		verify(libraryService).getOne(1L);
+		assertEquals(1L, library.getId().longValue());
 	}
 
 	@Test
-	public void deleteLibrary_NonExistingIdGiven_ShouldReturnNull()
-
-	{
+	public void deleteLibrary_NonExistingIdGiven_ShouldReturnNull() {
 		Library library = libraryController.getLibrary(1L);
-		verify(libraryService).getOne(1l);
+		verify(libraryService).getOne(1L);
 		assertEquals(null, library);
 	}
 
 
 	@Test
-	public void updateLibrary_NonExistingIdGiven_ShouldReturnNull()
-
-	{
+	public void updateLibrary_NonExistingIdGiven_ShouldReturnNull() {
 		LibraryDto libraryDto = new LibraryDto();
 		libraryDto.setId(1L);
-
-		Library library = libraryController.updateLibrary(libraryDto);
-		verify(libraryService).getOne(1l);
-
-		//assertEquals(1l, user.getId().longValue());
+		Library library = libraryController.updateLibrary(1L, libraryDto);
+		verify(libraryService).getOne(1L);
 		assertEquals(null, library);
 	}
 
 	@Test
-	public void updateLibrary_ExistingIdGiven_ShouldBeSuccessfull()
-
-	{
-		Library library=new Library();
+	public void updateLibrary_ExistingIdGiven_ShouldBeSuccessfull() {
+		Library library = new Library();
 		library.setId(1L);
-
 		LibraryDto libraryDto = new LibraryDto();
 		libraryDto.setId(1L);
 		libraryDto.setRentPeriod(15);
-
 		when(libraryService.getOne(1L)).thenReturn(library);
-
-		Library returnedLibrary = libraryController.updateLibrary(libraryDto);
+		Library returnedLibrary = libraryController.updateLibrary(1L, libraryDto);
 		verify(libraryService).getOne(1L);
-
-		//assertEquals(1l, user.getId().longValue());
 		assertEquals(libraryDto.getRentPeriod(), returnedLibrary.getRentPeriod());
 	}
 
 	@Test
-	public void getLibraries_LibrariesExist(){
+	public void getLibraries_LibrariesExist() {
 		Library library = new Library();
 		List<Library> libraries = new ArrayList<Library>();
 		libraries.add(library);
-
 		when(libraryService.getAll()).thenReturn(libraries);
-
 		List<Library> returnedLibraries = libraryController.getLibraries();
 		verify(libraryService).getAll();
-
 		assertEquals(libraries, returnedLibraries);
 	}
 
 	@Test
-	public void getLibraries_LibrariesDoNotExist(){
-
+	public void getLibraries_LibrariesDoNotExist() {
 		List<Library> libraries = new ArrayList<Library>();
-
 		List<Library> returnedLibraries = libraryController.getLibraries();
 		verify(libraryService).getAll();
-
 		assertEquals(libraries, returnedLibraries);
 	}
+
 }

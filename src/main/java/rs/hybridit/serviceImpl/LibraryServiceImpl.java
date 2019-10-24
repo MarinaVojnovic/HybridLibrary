@@ -11,33 +11,31 @@ import java.util.List;
 
 @Service
 public class LibraryServiceImpl implements LibraryService {
-    
-    private final LibraryRepository libraryRepository;
 
-    public LibraryServiceImpl(LibraryRepository libraryRepository) {
+	private LibraryRepository libraryRepository;
 
-        this.libraryRepository = libraryRepository;
+	public LibraryServiceImpl(LibraryRepository libraryRepository) {
+		this.libraryRepository = libraryRepository;
+	}
 
-    }
+	@Override
+	public Library getOne(long id) {
+		return libraryRepository.getOne(id);
+	}
 
-    @Override
-    public Library getOne(long id) {
-        return libraryRepository.getOne(id);
-    }
+	@Override
+	public List<Library> getAll() {
+		return libraryRepository.findAll();
+	}
 
-    @Override
-    public List<Library> getAll() {
-        return libraryRepository.findAll();
-    }
+	@Override
+	public Library create(Library library) {
+		return libraryRepository.save(library);
+	}
 
-    @Override
-    public Library create(Library library) {
-        return libraryRepository.save(library);
-    }
+	@Override
+	public void delete(Library library) {
+		libraryRepository.delete(library);
+	}
 
-
-    @Override
-    public void delete(Library library) {
-        libraryRepository.delete(library);
-    }
 }

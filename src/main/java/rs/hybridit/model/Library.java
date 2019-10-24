@@ -20,7 +20,6 @@ public class Library {
 	@GeneratedValue
 	private Long id;
 
-	@Column(name = "rent_period")
 	@Min(value = 1, message = "Minimum value is 1.")
 	@Max(value = 20, message = "Maximum value is 20.")
 	private Integer rentPeriod;
@@ -28,10 +27,11 @@ public class Library {
 	public Library() {
 	}
 
-	public Library(LibraryDto libraryDto){
+	public Library(LibraryDto libraryDto) {
 		this.id = libraryDto.getId();
-		this.rentPeriod=libraryDto.getRentPeriod();
+		this.rentPeriod = libraryDto.getRentPeriod();
 	}
+
 	public Long getId() {
 		return id;
 	}
