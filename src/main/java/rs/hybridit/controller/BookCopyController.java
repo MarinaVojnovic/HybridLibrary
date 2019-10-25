@@ -31,7 +31,7 @@ public class BookCopyController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> create(@RequestBody BookCopyDto bookCopyDto) {
+	public ResponseEntity<BookCopy> create(@RequestBody BookCopyDto bookCopyDto) {
 		BookCopy bookCopy = new BookCopy(bookCopyDto);
 		return new ResponseEntity<>(bookCopy, HttpStatus.CREATED);
 	}
@@ -42,18 +42,14 @@ public class BookCopyController {
 		if (bookCopy != null) {
 			return new ResponseEntity<>(bookCopy, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			return ResponseEntity.badRequest().body("Book copy with given id does not exist");
 		}
 	}
 
 	@GetMapping
-	public ResponseEntity<?> getBookCopys() {
+	public ResponseEntity<List<BookCopy>> getBookCopys() {
 		List<BookCopy> bookCopies = bookCopyService.getAll();
-		if (bookCopies != null) {
-			return new ResponseEntity<>(bookCopies, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
+		return new ResponseEntity<>(bookCopies, HttpStatus.OK);
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -64,7 +60,7 @@ public class BookCopyController {
 			bookCopy.setRentEnd(bookCopyDto.getRentEnd());
 			return new ResponseEntity<>(bookCopy, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		return ResponseEntity.badRequest().body("Book copy with given id does not exist");
 	}
 
 	@DeleteMapping(value = "/{id}")
@@ -74,7 +70,7 @@ public class BookCopyController {
 			bookCopyService.delete(bookCopy);
 			return new ResponseEntity<>(bookCopy, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			return ResponseEntity.badRequest().body("Book copy with given id does not exist");
 		}
 
 	}

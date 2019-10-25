@@ -29,51 +29,47 @@ public class LibraryController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> create(@RequestBody LibraryDto libraryDto) {
+	public ResponseEntity<Library> create(@RequestBody LibraryDto libraryDto) {
 		Library library = libraryService.create(new Library(libraryDto));
 		return new ResponseEntity<>(library, HttpStatus.CREATED);
 	}
 
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<?> getLibrary(@PathVariable Long id) {
-		Library library = libraryService.getOne(id);
+		Library library = libraryService.findById(id);
 		if (library != null) {
 			return new ResponseEntity<>(library, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			return ResponseEntity.badRequest().body("Library with given id does not exist");
 		}
 
 	}
 
 	@GetMapping
-	public ResponseEntity<?> getLibraries() {
+	public ResponseEntity<List<Library>> getLibraries() {
 		List<Library> libraries = libraryService.getAll();
-		if (libraries != null) {
-			return new ResponseEntity<>(libraries, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
+		return new ResponseEntity<>(libraries, HttpStatus.OK);
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> updateLibrary(@PathVariable Long id, @RequestBody LibraryDto libraryDto) {
-		Library library = libraryService.getOne(id);
+		Library library = libraryService.findById(id);
 		if (library != null) {
 			library.setRentPeriod(libraryDto.getRentPeriod());
 			return new ResponseEntity<>(library, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			return ResponseEntity.badRequest().body("Library with given id does not exist");
 		}
 	}
 
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<?> deleteLibrary(@PathVariable Long id) {
-		Library library = libraryService.getOne(id);
+		Library library = libraryService.findById(id);
 		if (library != null) {
 			libraryService.delete(library);
 			return new ResponseEntity<>(library, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			return ResponseEntity.badRequest().body("Library with given id does not exist");
 		}
 	}
 

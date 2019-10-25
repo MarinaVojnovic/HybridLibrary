@@ -2,6 +2,7 @@ package rs.hybridit.challenges;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -23,6 +24,7 @@ import rs.hybridit.serviceImpl.LibraryServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BookServiceImplTest {
+
 	@InjectMocks
 	private BookServiceImpl bookService;
 
@@ -50,8 +52,10 @@ public class BookServiceImplTest {
 	@Test
 	public void getAll_BooksExist() {
 		Book book = new Book();
+		Book book2 = new Book();
 		List<Book> books = new ArrayList<Book>();
 		books.add(book);
+		books.add(book2);
 		when(bookRepository.findAll()).thenReturn(books);
 		List<Book> returnedBooks = bookService.getAll();
 		verify(bookRepository).findAll();
@@ -67,7 +71,7 @@ public class BookServiceImplTest {
 	}
 
 	@Test
-	public void create_BookDoesNotExist(){
+	public void create_BookDoesNotExist() {
 		Book b = new Book();
 		b.setId(1L);
 		when(bookRepository.save(b)).thenReturn(b);
@@ -79,17 +83,18 @@ public class BookServiceImplTest {
 	@Test
 	public void findByName_ExistingNameGiven_ShouldBeSuccessfull() {
 		Book b = new Book();
-		b.setName("Ime knjige");
-		when(bookRepository.findByName("Ime knjige")).thenReturn(b);
-		Book book = bookService.findByName("Ime knjige");
-		verify(bookRepository).findByName("Ime knjige");
+		String name = any();
+		b.setName(name);
+		when(bookRepository.findByName(name)).thenReturn(b);
+		Book book = bookService.findByName(name);
+		verify(bookRepository).findByName(name);
 		assertEquals(b, book);
 	}
 
 	@Test
 	public void findByName_NonExistingNameGiven_ShouldBeSuccessfull() {
-		Book book = bookService.findByName("Ime knjige");
-		verify(bookRepository).findByName("Ime knjige");
+		Book book = bookService.findByName(any());
+		verify(bookRepository).findByName(any());
 		assertEquals(null, book);
 	}
 

@@ -18,6 +18,7 @@ import rs.hybridit.serviceImpl.LibraryServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LibraryServiceImplTest {
+
 	@InjectMocks
 	LibraryServiceImpl libraryService;
 
@@ -29,14 +30,14 @@ public class LibraryServiceImplTest {
 		Library l = new Library();
 		l.setId(1L);
 		when(libraryRepository.getOne(1L)).thenReturn(l);
-		Library library = libraryService.getOne(1L);
+		Library library = libraryService.findById(1L);
 		verify(libraryRepository).getOne(1L);
 		assertEquals(1L, library.getId().longValue());
 	}
 
 	@Test
 	public void getOne_NonExistingIdGiven_ShouldReturnNull() {
-		Library library = libraryService.getOne(1L);
+		Library library = libraryService.findById(1L);
 		verify(libraryRepository).getOne(1L);
 		assertEquals(null, library);
 	}
@@ -61,7 +62,7 @@ public class LibraryServiceImplTest {
 	}
 
 	@Test
-	public void create_LibraryDoesNotExist(){
+	public void create_LibraryDoesNotExist() {
 		Library l = new Library();
 		l.setId(1L);
 		when(libraryRepository.save(l)).thenReturn(l);

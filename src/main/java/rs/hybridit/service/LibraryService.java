@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface LibraryService {
 
-	Library getOne(long id);
+	Library findById(long id);
 
 	List<Library> getAll();
 

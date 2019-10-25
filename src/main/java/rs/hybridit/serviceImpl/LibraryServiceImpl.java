@@ -19,7 +19,7 @@ public class LibraryServiceImpl implements LibraryService {
 	}
 
 	@Override
-	public Library getOne(long id) {
+	public Library findById(long id) {
 		return libraryRepository.getOne(id);
 	}
 

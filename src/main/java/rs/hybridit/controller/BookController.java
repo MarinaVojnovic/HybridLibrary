@@ -31,7 +31,7 @@ public class BookController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> create(@RequestBody BookDto bookDto) {
+	public ResponseEntity<Book> create(@RequestBody BookDto bookDto) {
 		Book book = bookService.create(new Book(bookDto));
 		return new ResponseEntity<>(book, HttpStatus.CREATED);
 	}
@@ -42,18 +42,14 @@ public class BookController {
 		if (book != null) {
 			return new ResponseEntity<>(book, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			return ResponseEntity.badRequest().body("Book with given id does not exist.");
 		}
 	}
 
 	@GetMapping
-	public ResponseEntity<?> getBooks() {
+	public ResponseEntity<List<Book>> getBooks() {
 		List<Book> books = bookService.getAll();
-		if (books != null) {
-			return new ResponseEntity<>(books, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
+		return new ResponseEntity<>(books, HttpStatus.OK);
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -68,7 +64,7 @@ public class BookController {
 			book.setBookCopies(bookDto.getBookCopies());
 			return new ResponseEntity<>(book, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		return ResponseEntity.badRequest().body("Book with given id does not exist");
 	}
 
 	@DeleteMapping(value = "/{id}")
@@ -78,7 +74,7 @@ public class BookController {
 			bookService.delete(book);
 			return new ResponseEntity<>(book, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			return ResponseEntity.badRequest().body("Book with given id does not exist.");
 		}
 	}
 

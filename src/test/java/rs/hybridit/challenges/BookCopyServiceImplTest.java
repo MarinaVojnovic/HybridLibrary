@@ -20,6 +20,7 @@ import rs.hybridit.serviceImpl.BookServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BookCopyServiceImplTest {
+
 	@InjectMocks
 	private BookCopyServiceImpl bookCopyService;
 
@@ -44,26 +45,28 @@ public class BookCopyServiceImplTest {
 	}
 
 	@Test
-	public void getAll_BookCopysExist() {
+	public void getAll_BookCopiesExist() {
 		BookCopy bookCopy = new BookCopy();
-		List<BookCopy> bookCopys = new ArrayList<BookCopy>();
-		bookCopys.add(bookCopy);
-		when(bookCopyRepository.findAll()).thenReturn(bookCopys);
+		BookCopy bookCopy2 = new BookCopy();
+		List<BookCopy> bookCopies = new ArrayList<>();
+		bookCopies.add(bookCopy);
+		bookCopies.add(bookCopy2);
+		when(bookCopyRepository.findAll()).thenReturn(bookCopies);
 		List<BookCopy> returnedBookCopys = bookCopyService.getAll();
 		verify(bookCopyRepository).findAll();
-		assertEquals(bookCopys, returnedBookCopys);
+		assertEquals(bookCopies, returnedBookCopys);
 	}
 
 	@Test
-	public void getAll_BookCopysDoNotExist() {
-		List<BookCopy> bookCopys = new ArrayList<BookCopy>();
-		List<BookCopy> returnedBookCopys = bookCopyService.getAll();
+	public void getAll_BookCopiesDoNotExist() {
+		List<BookCopy> bookCopies = new ArrayList<BookCopy>();
+		List<BookCopy> returnedBookCopies = bookCopyService.getAll();
 		verify(bookCopyRepository).findAll();
-		assertEquals(bookCopys, returnedBookCopys);
+		assertEquals(bookCopies, returnedBookCopies);
 	}
 
 	@Test
-	public void create_BookDoesNotExist(){
+	public void create_BookDoesNotExist() {
 		BookCopy bc = new BookCopy();
 		bc.setId(1L);
 		when(bookCopyRepository.save(bc)).thenReturn(bc);
