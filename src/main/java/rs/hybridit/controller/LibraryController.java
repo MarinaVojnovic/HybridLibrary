@@ -43,7 +43,6 @@ public class LibraryController {
 		} else {
 			return ResponseEntity.badRequest().body("Library with given id does not exist");
 		}
-
 	}
 
 	@GetMapping

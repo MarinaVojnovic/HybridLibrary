@@ -27,14 +27,18 @@ public class BookCopy {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Book book;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	private User user;
+
 	public BookCopy() {
 	}
 
-	public BookCopy(Long id, LocalDate rentStart, LocalDate rentEnd, Book book) {
+	public BookCopy(Long id, LocalDate rentStart, LocalDate rentEnd, Book book, User user) {
 		this.id = id;
 		this.rentStart = rentStart;
 		this.rentEnd = rentEnd;
 		this.book = book;
+		this.user = user;
 	}
 
 	public BookCopy(BookCopyDto bookCopyDto) {

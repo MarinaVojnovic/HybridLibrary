@@ -6,7 +6,7 @@ import rs.hybridit.model.Book;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-	public Book findByName(String name);
+	Book findByName(String name);
 
 
 }
