@@ -14,8 +14,6 @@ import rs.hybridit.model.BookCopy;
 
 public class BookDto {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ISBN

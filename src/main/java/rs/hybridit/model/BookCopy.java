@@ -16,6 +16,8 @@ import rs.hybridit.dto.BookCopyDto;
 @Table(catalog = "dbhybridlibrary", name = "book_copies")
 public class BookCopy {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private LocalDate rentStart;

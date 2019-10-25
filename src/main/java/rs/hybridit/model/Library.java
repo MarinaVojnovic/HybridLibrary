@@ -17,7 +17,10 @@ import rs.hybridit.dto.LibraryDto;
 @Table(catalog = "dbhybridlibrary", name = "library")
 public class Library {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	private Integer rentPeriod;
 
 	public Library() {

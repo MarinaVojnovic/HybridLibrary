@@ -9,8 +9,6 @@ import javax.validation.constraints.Min;
 
 public class LibraryDto {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Min(value = 1, message = "Minimum value is 1.")
