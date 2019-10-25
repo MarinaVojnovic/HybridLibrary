@@ -2,6 +2,7 @@ package rs.hybridit.controller;
 
 
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class BookController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Book> create(@RequestBody BookDto bookDto) {
+	public ResponseEntity<Book> create(@RequestBody @Valid BookDto bookDto) {
 		Book book = bookService.create(new Book(bookDto));
 		return new ResponseEntity<>(book, HttpStatus.CREATED);
 	}
@@ -53,7 +54,7 @@ public class BookController {
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> updateBook(@PathVariable Long id, @RequestBody BookDto bookDto) {
+	public ResponseEntity<?> updateBook(@PathVariable Long id, @RequestBody @Valid BookDto bookDto) {
 		Book book = bookService.findById(id);
 		if (book != null) {
 			book.setName(bookDto.getName());

@@ -17,12 +17,7 @@ import rs.hybridit.dto.LibraryDto;
 @Table(catalog = "dbhybridlibrary", name = "library")
 public class Library {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@Min(value = 1, message = "Minimum value is 1.")
-	@Max(value = 20, message = "Maximum value is 20.")
 	private Integer rentPeriod;
 
 	public Library() {

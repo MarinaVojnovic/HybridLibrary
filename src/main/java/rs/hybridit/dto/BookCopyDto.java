@@ -2,10 +2,15 @@ package rs.hybridit.dto;
 
 import java.time.LocalDate;
 import java.util.Date;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import rs.hybridit.model.Book;
 
 public class BookCopyDto {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private LocalDate rentStart;
 	private LocalDate rentEnd;

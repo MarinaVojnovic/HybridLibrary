@@ -21,31 +21,20 @@ import rs.hybridit.dto.UserDto;
 @Table(catalog = "dbhybridlibrary", name = "users")
 public class User {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Size(min = 3, max = 15, message = "Length of name must be between 3 and 15.")
-	@NotBlank(message = "Name is not allowed to be empty.")
 	private String name;
 
-	@Size(min = 3, max = 15, message = "Length of last name must be between 3 and 15.")
-	@NotBlank(message = "Last name is not allowed to be empty.")
 	private String lastName;
 
-	@Email
 	private String email;
 
-	@Size(min = 3, max = 15, message = "Length of username must be between 3 and 15.")
-	@NotBlank(message = "Username is not allowed to be empty.")
 	private String username;
 
-	@Size(min = 5, message = "Password must be at least 5 characters long.")
-	@NotBlank(message = "Password is not allowed to be empty.")
 	private String password;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	private Set<BookCopy> bookCopies = new HashSet<BookCopy>();
 
 	public User() {

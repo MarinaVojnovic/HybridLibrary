@@ -1,6 +1,7 @@
 package rs.hybridit.controller;
 
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class UserController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<User> create(@RequestBody UserDto userDto) {
+	public ResponseEntity<User> create(@RequestBody @Valid UserDto userDto) {
 		User user = userService.create(new User(userDto));
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
@@ -50,7 +51,7 @@ public class UserController {
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+	public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody @Valid UserDto userDto) {
 		User user = userService.findById(id);
 		if (user != null) {
 			user.setName(userDto.getName());
