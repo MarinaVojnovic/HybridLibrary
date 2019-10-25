@@ -1,6 +1,7 @@
 package rs.hybridit.controller;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,41 +30,48 @@ public class LibraryController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.CREATED)
-	public Library create(@RequestBody LibraryDto libraryDto) {
-		return libraryService.create(new Library(libraryDto));
+	public ResponseEntity<Library> create(@RequestBody LibraryDto libraryDto) {
+		Library library = libraryService.create(new Library(libraryDto));
+		return new ResponseEntity<>(library, HttpStatus.CREATED);
 	}
 
 	@GetMapping(value = "/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public Library getLibrary(@PathVariable Long id) {
-		Library library = libraryService.getOne(id);
-		return library;
+	public ResponseEntity<?> getLibrary(@PathVariable Long id) {
+		Library library = libraryService.findById(id);
+		if (library != null) {
+			return new ResponseEntity<>(library, HttpStatus.OK);
+		} else {
+			return ResponseEntity.badRequest().body("Library with given id does not exist");
+		}
+
 	}
 
 	@GetMapping
-	@ResponseStatus(HttpStatus.OK)
-	public List<Library> getLibraries() {
-		return libraryService.getAll();
+	public ResponseEntity<List<Library>> getLibraries() {
+		List<Library> libraries = libraryService.getAll();
+		return new ResponseEntity<>(libraries, HttpStatus.OK);
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.OK)
-	public Library updateLibrary(@PathVariable Long id, @RequestBody LibraryDto libraryDto) {
-		Library library = libraryService.getOne(id);
+	public ResponseEntity<?> updateLibrary(@PathVariable Long id, @RequestBody LibraryDto libraryDto) {
+		Library library = libraryService.findById(id);
 		if (library != null) {
 			library.setRentPeriod(libraryDto.getRentPeriod());
+			return new ResponseEntity<>(library, HttpStatus.OK);
+		} else {
+			return ResponseEntity.badRequest().body("Library with given id does not exist");
 		}
-		return library;
 	}
 
 	@DeleteMapping(value = "/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public Library deleteLibrary(@PathVariable Long id) {
-		Library library = libraryService.getOne(id);
-		libraryService.delete(library);
-		return library;
+	public ResponseEntity<?> deleteLibrary(@PathVariable Long id) {
+		Library library = libraryService.findById(id);
+		if (library != null) {
+			libraryService.delete(library);
+			return new ResponseEntity<>(library, HttpStatus.OK);
+		} else {
+			return ResponseEntity.badRequest().body("Library with given id does not exist");
+		}
 	}
-
 
 }

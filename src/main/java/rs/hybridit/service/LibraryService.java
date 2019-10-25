@@ -1,12 +1,13 @@
 package rs.hybridit.service;
 
+import java.util.Optional;
 import rs.hybridit.model.Library;
 
 import java.util.List;
 
 public interface LibraryService {
 
-	Library getOne(long id);
+	Library findById(long id);
 
 	List<Library> getAll();
 

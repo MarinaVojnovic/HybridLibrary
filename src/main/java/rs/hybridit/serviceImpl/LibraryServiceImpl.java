@@ -1,7 +1,7 @@
 package rs.hybridit.serviceImpl;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import rs.hybridit.model.Library;
 import rs.hybridit.repository.LibraryRepository;
@@ -12,15 +12,20 @@ import java.util.List;
 @Service
 public class LibraryServiceImpl implements LibraryService {
 
-	private LibraryRepository libraryRepository;
+	private final LibraryRepository libraryRepository;
 
 	public LibraryServiceImpl(LibraryRepository libraryRepository) {
 		this.libraryRepository = libraryRepository;
 	}
 
 	@Override
-	public Library getOne(long id) {
-		return libraryRepository.getOne(id);
+	public Library findById(long id) {
+		Optional<Library> libraryOptional = libraryRepository.findById(id);
+		if (libraryOptional.isPresent()) {
+			return libraryOptional.get();
+		} else {
+			return null;
+		}
 	}
 
 	@Override
