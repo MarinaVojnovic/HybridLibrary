@@ -12,8 +12,6 @@ import rs.hybridit.model.BookCopy;
 
 public class UserDto {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Size(min = 3, max = 15, message = "Length of name must be between 3 and 15.")
