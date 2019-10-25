@@ -36,16 +36,16 @@ public class BookServiceImplTest {
 	public void findById_ExistingIdGiven_ShouldBeSuccessfull() {
 		Book b = new Book();
 		b.setId(1L);
-		when(bookRepository.getOne(1L)).thenReturn(b);
+		when(bookRepository.findById(1L)).thenReturn(java.util.Optional.of(b));
 		Book book = bookService.findById(1L);
-		verify(bookRepository).getOne(1L);
+		verify(bookRepository).findById(1L);
 		assertEquals(1L, book.getId().longValue());
 	}
 
 	@Test
 	public void findById_NonExistingIdGiven_ShouldReturnNull() {
 		Book book = bookService.findById(1L);
-		verify(bookRepository).getOne(1L);
+		verify(bookRepository).findById(1L);
 		assertEquals(null, book);
 	}
 

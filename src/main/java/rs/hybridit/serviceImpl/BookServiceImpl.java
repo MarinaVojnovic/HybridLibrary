@@ -1,11 +1,10 @@
 package rs.hybridit.serviceImpl;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import rs.hybridit.model.Book;
 import rs.hybridit.repository.BookRepository;
-import rs.hybridit.repository.LibraryRepository;
 import rs.hybridit.service.BookService;
 
 @Service
@@ -19,7 +18,12 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public Book findById(long id) {
-		return bookRepository.getOne(id);
+		Optional<Book> bookOptional = bookRepository.findById(id);
+		if (bookOptional.isPresent()) {
+			return bookOptional.get();
+		} else {
+			return null;
+		}
 	}
 
 	@Override

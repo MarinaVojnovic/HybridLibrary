@@ -1,6 +1,7 @@
 package rs.hybridit.service;
 
 import java.util.List;
+import java.util.Optional;
 import rs.hybridit.model.BookCopy;
 
 public interface BookCopyService {

@@ -26,19 +26,19 @@ public class LibraryServiceImplTest {
 	LibraryRepository libraryRepository;
 
 	@Test
-	public void getOne_ExistingIdGiven_ShouldBeSuccessfull() {
+	public void findOne_ExistingIdGiven_ShouldBeSuccessfull() {
 		Library l = new Library();
 		l.setId(1L);
-		when(libraryRepository.getOne(1L)).thenReturn(l);
+		when(libraryRepository.findById(1L)).thenReturn(java.util.Optional.of(l));
 		Library library = libraryService.findById(1L);
-		verify(libraryRepository).getOne(1L);
+		verify(libraryRepository).findById(1L);
 		assertEquals(1L, library.getId().longValue());
 	}
 
 	@Test
-	public void getOne_NonExistingIdGiven_ShouldReturnNull() {
+	public void findOne_NonExistingIdGiven_ShouldReturnNull() {
 		Library library = libraryService.findById(1L);
-		verify(libraryRepository).getOne(1L);
+		verify(libraryRepository).findById(1L);
 		assertEquals(null, library);
 	}
 

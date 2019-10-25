@@ -8,5 +8,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
 	public Book findByName(String name);
 
+
 }
 

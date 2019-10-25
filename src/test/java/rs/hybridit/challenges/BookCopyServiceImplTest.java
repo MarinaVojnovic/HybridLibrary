@@ -1,11 +1,13 @@
 package rs.hybridit.challenges;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -31,16 +33,17 @@ public class BookCopyServiceImplTest {
 	public void findById_ExistingIdGiven_ShouldBeSuccessfull() {
 		BookCopy bc = new BookCopy();
 		bc.setId(1L);
-		when(bookCopyRepository.getOne(1L)).thenReturn(bc);
+		when(bookCopyRepository.findById(1L)).thenReturn(Optional.of(bc));
 		BookCopy bookCopy = bookCopyService.findById(1L);
-		verify(bookCopyRepository).getOne(1L);
+		verify(bookCopyRepository).findById(1L);
 		assertEquals(1L, bookCopy.getId().longValue());
 	}
 
 	@Test
 	public void findById_NonExistingIdGiven_ShouldReturnNull() {
 		BookCopy bookCopy = bookCopyService.findById(1L);
-		verify(bookCopyRepository).getOne(1L);
+		verify(bookCopyRepository).findById(1L);
+		//BookCopy result = Optional.ofNullable(bookCopy).orElse(null);
 		assertEquals(null, bookCopy);
 	}
 

@@ -1,7 +1,7 @@
 package rs.hybridit.serviceImpl;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import rs.hybridit.model.BookCopy;
 import rs.hybridit.repository.BookCopyRepository;
@@ -18,7 +18,12 @@ public class BookCopyServiceImpl implements BookCopyService {
 
 	@Override
 	public BookCopy findById(long id) {
-		return bookCopyRepository.getOne(id);
+		Optional<BookCopy> bookCopyOptional = bookCopyRepository.findById(id);
+		if (bookCopyOptional.isPresent()) {
+			return bookCopyOptional.get();
+		} else {
+			return null;
+		}
 	}
 
 	@Override
