@@ -9,6 +9,8 @@ import rs.hybridit.model.Book;
 
 public class BookCopyDto {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private LocalDate rentStart;
 	private LocalDate rentEnd;

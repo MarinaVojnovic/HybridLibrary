@@ -20,8 +20,6 @@ import org.hibernate.validator.constraints.ISBN;
 @Table(catalog = "dbhybridlibrary", name = "books")
 public class Book {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String isbn;
