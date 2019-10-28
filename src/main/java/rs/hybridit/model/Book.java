@@ -27,7 +27,7 @@ import org.hibernate.validator.constraints.ISBN;
 public class Book {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	private Long id;
 
 	private String isbn;

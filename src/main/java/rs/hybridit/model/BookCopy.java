@@ -30,7 +30,7 @@ public class BookCopy {
 
 	private LocalDate rentEnd;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	private Book book;
 
 	@ManyToOne(fetch = FetchType.EAGER)
