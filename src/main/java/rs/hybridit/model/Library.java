@@ -21,8 +21,6 @@ public class Library {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Min(value = 1, message = "Minimum value is 1.")
-	@Max(value = 20, message = "Maximum value is 20.")
 	private Integer rentPeriod;
 
 	public Library() {

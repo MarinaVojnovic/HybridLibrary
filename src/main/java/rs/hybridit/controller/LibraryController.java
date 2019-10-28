@@ -2,6 +2,7 @@ package rs.hybridit.controller;
 
 import java.util.List;
 import java.util.Optional;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,7 +31,7 @@ public class LibraryController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Library> create(@RequestBody LibraryDto libraryDto) {
+	public ResponseEntity<Library> create(@RequestBody @Valid LibraryDto libraryDto) {
 		Library library = libraryService.create(new Library(libraryDto));
 		return new ResponseEntity<>(library, HttpStatus.CREATED);
 	}
@@ -43,7 +44,6 @@ public class LibraryController {
 		} else {
 			return ResponseEntity.badRequest().body("Library with given id does not exist");
 		}
-
 	}
 
 	@GetMapping
@@ -53,7 +53,7 @@ public class LibraryController {
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> updateLibrary(@PathVariable Long id, @RequestBody LibraryDto libraryDto) {
+	public ResponseEntity<?> updateLibrary(@PathVariable Long id, @RequestBody @Valid LibraryDto libraryDto) {
 		Library library = libraryService.findById(id);
 		if (library != null) {
 			library.setRentPeriod(libraryDto.getRentPeriod());

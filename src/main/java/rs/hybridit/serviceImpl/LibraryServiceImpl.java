@@ -20,12 +20,7 @@ public class LibraryServiceImpl implements LibraryService {
 
 	@Override
 	public Library findById(long id) {
-		Optional<Library> libraryOptional = libraryRepository.findById(id);
-		if (libraryOptional.isPresent()) {
-			return libraryOptional.get();
-		} else {
-			return null;
-		}
+		return libraryRepository.findById(id).orElse(null);
 	}
 
 	@Override

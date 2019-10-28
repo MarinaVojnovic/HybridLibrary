@@ -18,12 +18,7 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public Book findById(long id) {
-		Optional<Book> bookOptional = bookRepository.findById(id);
-		if (bookOptional.isPresent()) {
-			return bookOptional.get();
-		} else {
-			return null;
-		}
+		return bookRepository.findById(id).orElse(null);
 	}
 
 	@Override
