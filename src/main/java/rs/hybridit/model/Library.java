@@ -11,10 +11,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import rs.hybridit.dto.LibraryDto;
 
 @Entity
 @Table(catalog = "dbhybridlibrary", name = "library")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Library {
 
 	@Id
@@ -23,28 +29,9 @@ public class Library {
 
 	private Integer rentPeriod;
 
-	public Library() {
-	}
-
 	public Library(LibraryDto libraryDto) {
 		this.id = libraryDto.getId();
 		this.rentPeriod = libraryDto.getRentPeriod();
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Integer getRentPeriod() {
-		return rentPeriod;
-	}
-
-	public void setRentPeriod(Integer rentPeriod) {
-		this.rentPeriod = rentPeriod;
 	}
 
 }
