@@ -10,10 +10,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import rs.hybridit.dto.BookCopyDto;
 
 @Entity
 @Table(catalog = "dbhybridlibrary", name = "book_copies")
+@Getter
+@Setter
+@NoArgsConstructor
 public class BookCopy {
 
 	@Id
@@ -30,56 +36,12 @@ public class BookCopy {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private User user;
 
-	public BookCopy() {
-	}
-
-	public BookCopy(Long id, LocalDate rentStart, LocalDate rentEnd, Book book, User user) {
-		this.id = id;
-		this.rentStart = rentStart;
-		this.rentEnd = rentEnd;
-		this.book = book;
-		this.user = user;
-	}
-
 	public BookCopy(BookCopyDto bookCopyDto) {
 		this.id = bookCopyDto.getId();
 		this.rentStart = bookCopyDto.getRentStart();
 		this.rentEnd = bookCopyDto.getRentEnd();
 		this.book = bookCopyDto.getBook();
 	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public LocalDate getRentStart() {
-		return rentStart;
-	}
-
-	public void setRentStart(LocalDate rentStart) {
-		this.rentStart = rentStart;
-	}
-
-	public LocalDate getRentEnd() {
-		return rentEnd;
-	}
-
-	public void setRentEnd(LocalDate rentEnd) {
-		this.rentEnd = rentEnd;
-	}
-
-	public Book getBook() {
-		return book;
-	}
-
-	public void setBook(Book book) {
-		this.book = book;
-	}
-
 
 }
 
