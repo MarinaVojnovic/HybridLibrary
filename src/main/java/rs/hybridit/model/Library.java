@@ -24,7 +24,7 @@ import rs.hybridit.dto.LibraryDto;
 public class Library {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	private Long id;
 
 	private Integer rentPeriod;
