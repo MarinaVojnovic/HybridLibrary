@@ -45,7 +45,6 @@ public class Book {
 	private Set<BookCopy> bookCopies = new HashSet<BookCopy>();
 
 	public Book(BookDto bookDto) {
-		this.id = bookDto.getId();
 		this.isbn = bookDto.getIsbn();
 		this.name = bookDto.getName();
 		this.image = bookDto.getImage();
