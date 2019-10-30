@@ -1,7 +1,9 @@
 package rs.hybridit.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,6 +12,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -18,14 +25,18 @@ import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 import rs.hybridit.dto.UserDto;
+
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(catalog = "dbhybridlibrary", name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
-public class User {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class User implements UserDetails {
 
 	@Id
 	@GeneratedValue
@@ -39,11 +50,17 @@ public class User {
 
 	private String username;
 
+	@JsonIgnore
 	private String password;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	private Set<BookCopy> bookCopies = new HashSet<BookCopy>();
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "user_authority", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+		inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+	private List<Authority> authorities;
 
 	public User(UserDto userDto) {
 
@@ -55,6 +72,35 @@ public class User {
 		this.email = userDto.getEmail();
 		this.bookCopies = userDto.getBookCopies();
 
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return null;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonExpired() {
+		return false;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonLocked() {
+		return false;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return false;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isEnabled() {
+		return false;
 	}
 
 }

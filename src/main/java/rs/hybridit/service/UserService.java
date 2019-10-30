@@ -15,4 +15,6 @@ public interface UserService {
 
 	User findByUsername(String username);
 
+	User findUserByToken(String token);
+
 }
