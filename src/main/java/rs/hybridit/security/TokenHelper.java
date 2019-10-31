@@ -1,5 +1,7 @@
 package rs.hybridit.security;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,12 +40,13 @@ public class TokenHelper {
 	// Functions for generating new JWT token
 
 	public String generateToken(String username) {
-		return Jwts.builder().setIssuer(APP_NAME).setSubject(username).setIssuedAt(timeProvider.now())
+		return Jwts.builder().setIssuer(APP_NAME).setSubject(username)
+			.setIssuedAt(java.sql.Date.valueOf(timeProvider.now()))
 			.setExpiration(generateExpirationDate()).signWith(SIGNATURE_ALGORITHM, SECRET).compact();
 	}
 
 	private Date generateExpirationDate() {
-		return new Date(timeProvider.now().getTime() + this.EXPIRES_IN * 1000);
+		return new Date(java.sql.Date.valueOf(timeProvider.now()).getTime() + this.EXPIRES_IN * 1000);
 	}
 
 	// Functions for refreshing JWT token
@@ -53,9 +56,9 @@ public class TokenHelper {
 		try {
 			final Claims claims = this.getAllClaimsFromToken(token);
 			if (claims == null) {
-				throw new Exception("null");
+				throw new Exception("Claims is not allowed to be null.");
 			} else {
-				claims.setIssuedAt(timeProvider.now());
+				claims.setIssuedAt(java.sql.Date.valueOf(timeProvider.now()));
 			}
 			refreshedToken = Jwts.builder().setClaims(claims).setExpiration(generateExpirationDate())
 				.signWith(SIGNATURE_ALGORITHM, SECRET).compact();
@@ -86,8 +89,8 @@ public class TokenHelper {
 	}
 
 	private Boolean isTokenExpired(String token) {
-		final Date expiration = this.getExpirationDateFromToken(token);
-		return expiration.before(timeProvider.now());
+		final LocalDate expiration = this.getExpirationDateFromToken(token);
+		return expiration.isBefore(timeProvider.now());
 	}
 
 	// Functions for getting data from token
@@ -107,7 +110,7 @@ public class TokenHelper {
 		try {
 			final Claims claims = this.getAllClaimsFromToken(token);
 			if (claims == null) {
-				throw new Exception("null");
+				throw new Exception("Claims is not allowed to be null.");
 			} else {
 				username = claims.getSubject();
 			}
@@ -122,7 +125,7 @@ public class TokenHelper {
 		try {
 			final Claims claims = this.getAllClaimsFromToken(token);
 			if (claims == null) {
-				throw new Exception("null");
+				throw new Exception("Claims is not allowed to be null.");
 			} else {
 				issueAt = claims.getIssuedAt();
 			}
@@ -137,7 +140,7 @@ public class TokenHelper {
 		try {
 			final Claims claims = this.getAllClaimsFromToken(token);
 			if (claims == null) {
-				throw new Exception("null");
+				throw new Exception("Claims is not allowed to be null.");
 			} else {
 				audience = claims.getAudience();
 			}
@@ -147,14 +150,15 @@ public class TokenHelper {
 		return audience;
 	}
 
-	public Date getExpirationDateFromToken(String token) {
-		Date expiration;
+	public LocalDate getExpirationDateFromToken(String token) {
+		LocalDate expiration;
 		try {
 			final Claims claims = this.getAllClaimsFromToken(token);
 			if (claims == null) {
-				throw new Exception("null");
+				throw new Exception("Claims is not allowed to be null.");
 			} else {
-				expiration = claims.getExpiration();
+				//expiration = new claims.getExpiration().toLocalDate();
+				expiration = new java.sql.Date(claims.getExpiration().getTime()).toLocalDate();
 			}
 		} catch (Exception e) {
 			expiration = null;

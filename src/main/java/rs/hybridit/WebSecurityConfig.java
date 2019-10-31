@@ -55,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Autowired
-	TokenHelper tokenUtils;
+	private TokenHelper tokenUtils;
 
 	// Defining access rights to ceratin URLs
 	@Override
@@ -85,13 +85,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	}
 
-	// General safety of application
-	@Override
-
 	public void configure(WebSecurity web) throws Exception {
 		// Token Filter will ignore these paths
 		web.ignoring().antMatchers(HttpMethod.POST, "/auth/login", "/h2/**");
-		web.ignoring().antMatchers(HttpMethod.GET, "/", "/login", "/h2/**", "/webjars/**", "/*.html", "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js");
+		web.ignoring().antMatchers(HttpMethod.GET, "/", "/login", "/h2/**", "/webjars/**", "/*.html", "/favicon.ico",
+			"/**/*.html", "/**/*.css", "/**/*.js");
 	}
 
 }

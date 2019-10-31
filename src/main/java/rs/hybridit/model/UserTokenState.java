@@ -4,15 +4,15 @@ public class UserTokenState {
 
 	private String accessToken;
 	private Long expiresIn;
-	private UserRoleName userType;
+	private Role role;
 
 	public UserTokenState() {
 		this.accessToken = null;
 		this.expiresIn = null;
-		this.setUserRoleName(null);
+		this.role = null;
 	}
 
-	public UserTokenState(String accessToken, long expiresIn, UserRoleName userType) {
+	public UserTokenState(String accessToken, long expiresIn, Role userType) {
 		this.accessToken = accessToken;
 		this.expiresIn = expiresIn;
 		this.setUserRoleName(userType);
@@ -34,12 +34,12 @@ public class UserTokenState {
 		this.expiresIn = expiresIn;
 	}
 
-	public UserRoleName getUserRoleName() {
-		return userType;
+	public Role getUserRoleName() {
+		return role;
 	}
 
-	public void setUserRoleName(UserRoleName userType) {
-		this.userType = userType;
+	public void setUserRoleName(Role role) {
+		this.role = role;
 	}
 
 }

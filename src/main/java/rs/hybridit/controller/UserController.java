@@ -30,7 +30,7 @@ public class UserController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<User> create(@RequestBody @Valid UserDto userDto) {
 		User user = userService.create(new User(userDto));
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
@@ -69,7 +69,7 @@ public class UserController {
 	}
 
 	@DeleteMapping(value = "/{id}")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> deleteUser(@PathVariable Long id) {
 		User user = userService.findById(id);
 		if (user != null) {

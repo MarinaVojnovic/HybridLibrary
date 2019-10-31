@@ -32,7 +32,7 @@ public class LibraryController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Library> create(@RequestBody @Valid LibraryDto libraryDto) {
 		Library library = libraryService.create(new Library(libraryDto));
 		return new ResponseEntity<>(library, HttpStatus.CREATED);
@@ -55,7 +55,7 @@ public class LibraryController {
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> updateLibrary(@PathVariable Long id, @RequestBody @Valid LibraryDto libraryDto) {
 		Library library = libraryService.findById(id);
 		if (library != null) {
@@ -67,7 +67,7 @@ public class LibraryController {
 	}
 
 	@DeleteMapping(value = "/{id}")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> deleteLibrary(@PathVariable Long id) {
 		Library library = libraryService.findById(id);
 		if (library != null) {

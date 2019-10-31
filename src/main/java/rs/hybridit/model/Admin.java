@@ -7,18 +7,14 @@ import lombok.NoArgsConstructor;
 import rs.hybridit.dto.UserDto;
 
 @Entity
+@NoArgsConstructor
 public class Admin extends User {
 
 	public Admin(UserDto userDto) {
-		this.setId(userDto.getId());
-		this.setName(userDto.getName());
-		this.setLastName(userDto.getLastName());
-		this.setUsername(userDto.getUsername());
-		this.setEmail(userDto.getEmail());
-		this.setBookCopies(userDto.getBookCopies());
+		super(userDto);
 		List<Authority> authorities = new ArrayList<>();
 		Authority a = new Authority();
-		a.setName(UserRoleName.ROLE_ADMIN);
+		a.setName(Role.ADMIN);
 		authorities.add(a);
 		this.setAuthorities(authorities);
 	}

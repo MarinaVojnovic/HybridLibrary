@@ -1,7 +1,6 @@
 package rs.hybridit.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -19,22 +18,22 @@ public class Authority implements GrantedAuthority {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long id;
+	private Long id;
 
 	@Enumerated(EnumType.STRING)
-	UserRoleName name;
+	private Role name;
 
 	@Override
 	public String getAuthority() {
 		return name.name();
 	}
 
-	public void setName(UserRoleName name) {
+	public void setName(Role name) {
 		this.name = name;
 	}
 
 	@JsonIgnore
-	public UserRoleName getName() {
+	public Role getName() {
 		return name;
 	}
 
