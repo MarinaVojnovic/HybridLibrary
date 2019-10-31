@@ -1,6 +1,7 @@
 package rs.hybridit.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -72,6 +73,14 @@ public class User implements UserDetails {
 		this.email = userDto.getEmail();
 		this.bookCopies = userDto.getBookCopies();
 
+	}
+
+	public void setAuthority(Role role){
+		List<Authority> authorities = new ArrayList<>();
+		Authority a = new Authority();
+		a.setName(role);
+		authorities.add(a);
+		this.setAuthorities(authorities);
 	}
 
 	@Override

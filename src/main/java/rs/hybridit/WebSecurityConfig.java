@@ -70,7 +70,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 			.authorizeRequests()
 			.antMatchers("/auth/login").permitAll()
-			.antMatchers("/auth/registerLibrarian").permitAll()
 			.antMatchers("/**").permitAll()
 
 			// every request needs to be authorized

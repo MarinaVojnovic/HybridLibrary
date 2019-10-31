@@ -40,6 +40,7 @@ public class BookCopyController {
 	}
 
 	@GetMapping(value = "/{id}")
+	@PreAuthorize("hasRole('ADMIN', 'LIBRARIAN')")
 	public ResponseEntity<?> getBookCopy(@PathVariable Long id) {
 		BookCopy bookCopy = bookCopyService.findById(id);
 		if (bookCopy != null) {
@@ -50,6 +51,7 @@ public class BookCopyController {
 	}
 
 	@GetMapping
+	@PreAuthorize("hasRole('ADMIN', 'LIBRARIAN')")
 	public ResponseEntity<List<BookCopy>> getBookCopys() {
 		List<BookCopy> bookCopies = bookCopyService.getAll();
 		return new ResponseEntity<>(bookCopies, HttpStatus.OK);

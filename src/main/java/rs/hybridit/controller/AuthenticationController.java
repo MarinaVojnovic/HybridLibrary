@@ -54,6 +54,7 @@ public class AuthenticationController {
 	}
 
 	@PostMapping(value = "/registerLibrarian")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> registerLibrarian(@RequestBody UserDto user) {
 		if (this.userDetailsService.registerLibrarian(user)) {
 			return new ResponseEntity<>(true, HttpStatus.OK);
@@ -68,8 +69,9 @@ public class AuthenticationController {
 		UserTokenState userTokenState = userDetailsService.login(authenticationRequest);
 		if (userTokenState == null) {
 			return new ResponseEntity<>(new MessageDto("Wrong username or password.", "Error"), HttpStatus.OK);
-		}else{
+		} else {
 			return new ResponseEntity<>(userTokenState, HttpStatus.OK);
 		}
 	}
+
 }

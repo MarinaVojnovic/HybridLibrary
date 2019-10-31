@@ -26,7 +26,7 @@ public class VerificationToken {
 	private User user;
 
 	public VerificationToken() {
-		super();
+
 	}
 
 	public Long getId() {

@@ -12,10 +12,10 @@ public class UserTokenState {
 		this.role = null;
 	}
 
-	public UserTokenState(String accessToken, long expiresIn, Role userType) {
+	public UserTokenState(String accessToken, long expiresIn, Role role) {
 		this.accessToken = accessToken;
 		this.expiresIn = expiresIn;
-		this.setUserRoleName(userType);
+		this.role=role;
 	}
 
 	public String getAccessToken() {

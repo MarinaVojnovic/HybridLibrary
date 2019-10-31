@@ -37,6 +37,7 @@ public class UserController {
 	}
 
 	@GetMapping(value = "/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> getUser(@PathVariable Long id) {
 		User user = userService.findById(id);
 		if (user != null) {
@@ -47,12 +48,14 @@ public class UserController {
 	}
 
 	@GetMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<User>> getUsers() {
 		List<User> users = userService.getAll();
 		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody @Valid UserDto userDto) {
 		User user = userService.findById(id);
 		if (user != null) {

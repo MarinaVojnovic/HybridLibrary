@@ -6,7 +6,7 @@ public class JwtAuthenticationRequest {
 	private String password;
 
 	public JwtAuthenticationRequest() {
-		super();
+
 	}
 
 	public JwtAuthenticationRequest(String username, String password) {

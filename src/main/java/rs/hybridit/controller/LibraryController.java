@@ -39,6 +39,7 @@ public class LibraryController {
 	}
 
 	@GetMapping(value = "/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> getLibrary(@PathVariable Long id) {
 		Library library = libraryService.findById(id);
 		if (library != null) {
@@ -49,6 +50,7 @@ public class LibraryController {
 	}
 
 	@GetMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Library>> getLibraries() {
 		List<Library> libraries = libraryService.getAll();
 		return new ResponseEntity<>(libraries, HttpStatus.OK);

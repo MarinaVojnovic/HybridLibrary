@@ -12,11 +12,7 @@ public class Admin extends User {
 
 	public Admin(UserDto userDto) {
 		super(userDto);
-		List<Authority> authorities = new ArrayList<>();
-		Authority a = new Authority();
-		a.setName(Role.ADMIN);
-		authorities.add(a);
-		this.setAuthorities(authorities);
+		setAuthority(Role.ADMIN);
 	}
 
 }

@@ -40,6 +40,7 @@ public class BookController {
 	}
 
 	@GetMapping(value = "/{id}")
+	@PreAuthorize("hasRole('USER', 'LIBRARIAN')")
 	public ResponseEntity<?> getBook(@PathVariable Long id) {
 		Book book = bookService.findById(id);
 		if (book != null) {
@@ -50,6 +51,7 @@ public class BookController {
 	}
 
 	@GetMapping
+	@PreAuthorize("hasRole('USER', 'LIBRARIAN')")
 	public ResponseEntity<List<Book>> getBooks() {
 		List<Book> books = bookService.getAll();
 		return new ResponseEntity<>(books, HttpStatus.OK);

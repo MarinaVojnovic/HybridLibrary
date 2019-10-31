@@ -15,7 +15,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import rs.hybridit.model.User;
-import rs.hybridit.common.TimeProvider;
 
 @Component
 public class TokenHelper {
@@ -32,21 +31,20 @@ public class TokenHelper {
 	@Value("Authorization")
 	private String AUTH_HEADER;
 
-	@Autowired
-	TimeProvider timeProvider;
-
 	private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
+
+	private final static int EXPIRING_CONST = 100;
 
 	// Functions for generating new JWT token
 
 	public String generateToken(String username) {
 		return Jwts.builder().setIssuer(APP_NAME).setSubject(username)
-			.setIssuedAt(java.sql.Date.valueOf(timeProvider.now()))
+			.setIssuedAt(java.sql.Date.valueOf(LocalDate.now()))
 			.setExpiration(generateExpirationDate()).signWith(SIGNATURE_ALGORITHM, SECRET).compact();
 	}
 
 	private Date generateExpirationDate() {
-		return new Date(java.sql.Date.valueOf(timeProvider.now()).getTime() + this.EXPIRES_IN * 1000);
+		return new Date(java.sql.Date.valueOf(LocalDate.now()).getTime() + this.EXPIRES_IN * EXPIRING_CONST);
 	}
 
 	// Functions for refreshing JWT token
@@ -58,7 +56,7 @@ public class TokenHelper {
 			if (claims == null) {
 				throw new Exception("Claims is not allowed to be null.");
 			} else {
-				claims.setIssuedAt(java.sql.Date.valueOf(timeProvider.now()));
+				claims.setIssuedAt(java.sql.Date.valueOf(LocalDate.now()));
 			}
 			refreshedToken = Jwts.builder().setClaims(claims).setExpiration(generateExpirationDate())
 				.signWith(SIGNATURE_ALGORITHM, SECRET).compact();
@@ -85,12 +83,12 @@ public class TokenHelper {
 	}
 
 	private Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
-		return (lastPasswordReset != null && created.getTime() + 1000 < lastPasswordReset.getTime());
+		return (lastPasswordReset != null && created.getTime() + EXPIRING_CONST < lastPasswordReset.getTime());
 	}
 
 	private Boolean isTokenExpired(String token) {
 		final LocalDate expiration = this.getExpirationDateFromToken(token);
-		return expiration.isBefore(timeProvider.now());
+		return expiration.isBefore(LocalDate.now());
 	}
 
 	// Functions for getting data from token
