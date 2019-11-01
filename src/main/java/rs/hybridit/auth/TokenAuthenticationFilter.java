@@ -20,12 +20,12 @@ Filter that intercepts every request from client to server, except paths listed 
  */
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-	private TokenHelper tokenUtils;
+	private TokenHelper tokenHelper;
 
 	private UserDetailsService userDetailsService;
 
 	public TokenAuthenticationFilter(TokenHelper tokenHelper, UserDetailsService userDetailsService) {
-		this.tokenUtils = tokenHelper;
+		this.tokenHelper = tokenHelper;
 		this.userDetailsService = userDetailsService;
 	}
 
@@ -34,14 +34,14 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		throws IOException, ServletException {
 
 		String username;
-		String authToken = tokenUtils.getToken(request);
+		String authToken = tokenHelper.getToken(request);
 
 		if (authToken != null) {
-			username = tokenUtils.getUsernameFromToken(authToken);
+			username = tokenHelper.getUsernameFromToken(authToken);
 
 			if (username != null) {
 				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-				if (tokenUtils.validateToken(authToken, userDetails)) {
+				if (tokenHelper.validateToken(authToken, userDetails)) {
 					TokenBasedAuthentication authentication = new TokenBasedAuthentication(userDetails);
 					authentication.setToken(authToken);
 					SecurityContextHolder.getContext().setAuthentication(authentication);

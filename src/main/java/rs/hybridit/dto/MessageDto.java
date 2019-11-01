@@ -11,5 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class MessageDto {
 	private String message;
-	private String header;
+	private String result;
 }

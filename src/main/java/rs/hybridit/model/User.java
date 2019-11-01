@@ -18,6 +18,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -51,17 +52,13 @@ public class User implements UserDetails {
 
 	private String username;
 
-	@JsonIgnore
 	private String password;
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	private Set<BookCopy> bookCopies = new HashSet<BookCopy>();
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "user_authority", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-		inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
-	private List<Authority> authorities;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Authority authority;
 
 	public User(UserDto userDto) {
 
@@ -75,12 +72,12 @@ public class User implements UserDetails {
 
 	}
 
-	public void setAuthority(Role role){
-		List<Authority> authorities = new ArrayList<>();
-		Authority a = new Authority();
-		a.setName(role);
-		authorities.add(a);
-		this.setAuthorities(authorities);
+	public Authority getAuhtority() {
+		return this.authority;
+	}
+
+	public void setAuthority(Authority authority) {
+		this.authority = authority;
 	}
 
 	@Override
@@ -91,25 +88,25 @@ public class User implements UserDetails {
 	@JsonIgnore
 	@Override
 	public boolean isAccountNonExpired() {
-		return false;
+		return true;
 	}
 
 	@JsonIgnore
 	@Override
 	public boolean isAccountNonLocked() {
-		return false;
+		return true;
 	}
 
 	@JsonIgnore
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return false;
+		return true;
 	}
 
 	@JsonIgnore
 	@Override
 	public boolean isEnabled() {
-		return false;
+		return true;
 	}
 
 }

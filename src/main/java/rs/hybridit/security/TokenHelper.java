@@ -19,16 +19,18 @@ import rs.hybridit.model.User;
 @Component
 public class TokenHelper {
 
-	@Value("spring-security-demo")
+	//@Value("spring-security-demo")
+	//@Value("${unknown.param:some default}")
+	@Value("${app.title}")
 	private String APP_NAME;
 
-	@Value("somesecret")
+	@Value("${app.secret}")
 	public String SECRET;
 
-	@Value("87600")
+	@Value("${app.expires}")
 	private int EXPIRES_IN;
 
-	@Value("Authorization")
+	@Value("${app.authHeader}")
 	private String AUTH_HEADER;
 
 	private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
@@ -68,8 +70,8 @@ public class TokenHelper {
 
 	public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
 		final Date created = this.getIssuedAtDateFromToken(token);
-		return (!(this.isCreatedBeforeLastPasswordReset(created, lastPasswordReset))
-			&& (!(this.isTokenExpired(token))));
+		return !(this.isCreatedBeforeLastPasswordReset(created, lastPasswordReset))
+			&& (!(this.isTokenExpired(token)));
 	}
 
 	// Functions for validating JWT token data

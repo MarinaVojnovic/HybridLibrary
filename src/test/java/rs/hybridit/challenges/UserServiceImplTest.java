@@ -6,11 +6,14 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import rs.hybridit.dto.UserDto;
 import rs.hybridit.model.User;
 import rs.hybridit.repository.UserRepository;
 import rs.hybridit.serviceImpl.UserServiceImpl;
@@ -23,6 +26,9 @@ public class UserServiceImplTest {
 
 	@Mock
 	UserRepository userRepository;
+
+	@Mock
+	PasswordEncoder passwordEncoder;
 
 	@Test
 	public void findOne_ExistingIdGiven_ShouldBeSuccessfull() {
@@ -68,6 +74,48 @@ public class UserServiceImplTest {
 		User user = userService.create(u);
 		verify(userRepository).save(u);
 		assertEquals(u, user);
+	}
+
+	@Test
+	public void registerAdmin_existingUsernameGiven() {
+		User registeredUser = new User();
+		registeredUser.setUsername("marina");
+		UserDto user = new UserDto();
+		user.setUsername("marina");
+		user.setPassword("password");
+		when(userRepository.findByUsername("marina")).thenReturn(registeredUser);
+		Boolean result = userService.registerAdmin(user);
+		Assert.assertFalse(result);
+	}
+
+	@Test
+	public void registerLibrarian_existingUsernameGiven() {
+		User registeredUser = new User();
+		registeredUser.setUsername("marina");
+		UserDto user = new UserDto();
+		user.setUsername("marina");
+		user.setPassword("password");
+		when(userRepository.findByUsername("marina")).thenReturn(registeredUser);
+		Boolean result = userService.registerLibrarian(user);
+		Assert.assertFalse(result);
+	}
+
+	@Test
+	public void registerAdmin_uniqueUsernameGiven() {
+		UserDto user = new UserDto();
+		user.setUsername("marina");
+		user.setPassword("password");
+		Boolean result = userService.registerAdmin(user);
+		Assert.assertTrue(result);
+	}
+
+	@Test
+	public void registerLibrarian_uniqueUsernameGiven() {
+		UserDto user = new UserDto();
+		user.setUsername("marina");
+		user.setPassword("password");
+		Boolean result = userService.registerLibrarian(user);
+		Assert.assertTrue(result);
 	}
 
 }

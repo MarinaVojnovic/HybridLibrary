@@ -3,72 +3,61 @@ package rs.hybridit.controller;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import rs.hybridit.WebSecurityConfig;
 import rs.hybridit.auth.JwtAuthenticationRequest;
 import rs.hybridit.dto.MessageDto;
 import rs.hybridit.dto.UserDto;
-import rs.hybridit.model.Admin;
-import rs.hybridit.model.User;
-import rs.hybridit.model.Role;
 import rs.hybridit.model.UserTokenState;
 import rs.hybridit.security.TokenHelper;
-import rs.hybridit.serviceImpl.CustomUserDetailsService;
+import rs.hybridit.service.UserService;
+import rs.hybridit.serviceImpl.UserServiceImpl;
 
 @RestController
 @RequestMapping(value = "/auth")
+@AllArgsConstructor
 public class AuthenticationController {
 
 	private TokenHelper tokenUtils;
 
-	private CustomUserDetailsService userDetailsService;
+	private WebSecurityConfig webSecurityConfig;
 
-	private AuthenticationManager authenticationManager;
+	private UserService userService;
 
-	public AuthenticationController(TokenHelper tokenUtils, CustomUserDetailsService customUserDetailsService,
-		AuthenticationManager authenticationManager) {
-		this.tokenUtils = tokenUtils;
-		this.userDetailsService = customUserDetailsService;
-		this.authenticationManager = authenticationManager;
-	}
-
-	@PostMapping(value = "registerAdmin")
+	@PostMapping(value = "/registerAdmin")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> registerAdmin(@RequestBody UserDto user) {
-		if (this.userDetailsService.registerAdmin(user)) {
+		if (this.userService.registerAdmin(user) != null) {
 			return new ResponseEntity<>(true, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(new MessageDto("Username is already taken.", "Error"), HttpStatus.OK);
+		return new ResponseEntity<>(new MessageDto("Username is already taken.", "Error"), HttpStatus.CONFLICT);
 	}
 
 	@PostMapping(value = "/registerLibrarian")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> registerLibrarian(@RequestBody UserDto user) {
-		if (this.userDetailsService.registerLibrarian(user)) {
+		if (this.userService.registerLibrarian(user) != null) {
 			return new ResponseEntity<>(true, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(new MessageDto("Username is already taken.", "Error"), HttpStatus.OK);
+		return new ResponseEntity<>(new MessageDto("Username is already taken.", "Error"), HttpStatus.CONFLICT);
 	}
 
 	@PostMapping(value = "/login")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
-		HttpServletResponse response) throws AuthenticationException, IOException {
+		HttpServletResponse response) throws AuthenticationException, IOException, Exception {
 
-		UserTokenState userTokenState = userDetailsService.login(authenticationRequest);
+		UserTokenState userTokenState = webSecurityConfig.login(authenticationRequest);
 		if (userTokenState == null) {
-			return new ResponseEntity<>(new MessageDto("Wrong username or password.", "Error"), HttpStatus.OK);
+			return new ResponseEntity<>(new MessageDto("Wrong username or password.", "Error"), HttpStatus.NOT_FOUND);
 		} else {
 			return new ResponseEntity<>(userTokenState, HttpStatus.OK);
 		}
