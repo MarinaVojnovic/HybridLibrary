@@ -30,26 +30,24 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findById(id).orElse(null);
 	}
 
-	public Boolean registerAdmin(UserDto user) {
+	public void registerAdmin(UserDto user) throws Exception {
 		if (this.usernameTaken(user.getUsername())) {
-			return false;
+			throw new IllegalArgumentException("Username is already taken.");
 		}
 		User admin = new User(user);
 		admin.setAuthority(new Authority(Role.ADMIN));
 		admin.setPassword(this.passwordEncoder.encode(user.getPassword()));
 		create(admin);
-		return true;
 	}
 
-	public Boolean registerLibrarian(UserDto user) {
+	public void registerLibrarian(UserDto user) {
 		if (this.usernameTaken(user.getUsername())) {
-			return false;
+			throw new IllegalArgumentException("Username is already taken.");
 		}
 		User librarian = new User(user);
 		librarian.setAuthority(new Authority(Role.LIBRARIAN));
 		librarian.setPassword(this.passwordEncoder.encode(user.getPassword()));
 		create(librarian);
-		return true;
 	}
 
 	public boolean usernameTaken(String username) {

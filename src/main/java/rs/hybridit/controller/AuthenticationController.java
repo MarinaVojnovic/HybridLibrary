@@ -36,20 +36,28 @@ public class AuthenticationController {
 	@PostMapping(value = "/registerAdmin")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> registerAdmin(@RequestBody UserDto user) {
-		if (this.userService.registerAdmin(user) != null) {
-			return new ResponseEntity<>(true, HttpStatus.OK);
+
+		try{
+			this.userService.registerAdmin(user);
+			return new ResponseEntity<>(new MessageDto("Username is already taken.", "Error"), HttpStatus.CONFLICT);
+		}catch(Exception e){
+			return new ResponseEntity<>(new MessageDto(e.getMessage(), "Error"), HttpStatus.CONFLICT);
 		}
-		return new ResponseEntity<>(new MessageDto("Username is already taken.", "Error"), HttpStatus.CONFLICT);
 	}
+
 
 	@PostMapping(value = "/registerLibrarian")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> registerLibrarian(@RequestBody UserDto user) {
-		if (this.userService.registerLibrarian(user) != null) {
+
+		try{
+			this.userService.registerLibrarian(user);
 			return new ResponseEntity<>(true, HttpStatus.OK);
+		}catch(Exception e){
+			return new ResponseEntity<>(new MessageDto(e.getMessage(), "Error"), HttpStatus.CONFLICT);
 		}
-		return new ResponseEntity<>(new MessageDto("Username is already taken.", "Error"), HttpStatus.CONFLICT);
 	}
+
 
 	@PostMapping(value = "/login")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,

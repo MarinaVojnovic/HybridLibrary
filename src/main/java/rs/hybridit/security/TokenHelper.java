@@ -19,8 +19,6 @@ import rs.hybridit.model.User;
 @Component
 public class TokenHelper {
 
-	//@Value("spring-security-demo")
-	//@Value("${unknown.param:some default}")
 	@Value("${app.title}")
 	private String APP_NAME;
 
@@ -38,7 +36,6 @@ public class TokenHelper {
 	private final static int EXPIRING_CONST = 100;
 
 	// Functions for generating new JWT token
-
 	public String generateToken(String username) {
 		return Jwts.builder().setIssuer(APP_NAME).setSubject(username)
 			.setIssuedAt(java.sql.Date.valueOf(LocalDate.now()))
@@ -50,7 +47,6 @@ public class TokenHelper {
 	}
 
 	// Functions for refreshing JWT token
-
 	public String refreshToken(String token) {
 		String refreshedToken;
 		try {
@@ -75,7 +71,6 @@ public class TokenHelper {
 	}
 
 	// Functions for validating JWT token data
-
 	public Boolean validateToken(String token, UserDetails userDetails) {
 		User user = (User) userDetails;
 		final String username = getUsernameFromToken(token);
@@ -94,7 +89,6 @@ public class TokenHelper {
 	}
 
 	// Functions for getting data from token
-
 	private Claims getAllClaimsFromToken(String token) {
 		Claims claims;
 		try {
@@ -171,7 +165,6 @@ public class TokenHelper {
 	}
 
 	// Functions for getting JWT token out of HTTP request
-
 	public String getToken(HttpServletRequest request) {
 		String authHeader = getAuthHeaderFromHeader(request);
 

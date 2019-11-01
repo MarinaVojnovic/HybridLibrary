@@ -76,19 +76,25 @@ public class UserServiceImplTest {
 		assertEquals(u, user);
 	}
 
-	@Test
-	public void registerAdmin_existingUsernameGiven() {
+	@Test(expected = IllegalArgumentException.class)
+	public void registerAdmin_existingUsernameGiven() throws Exception {
+
 		User registeredUser = new User();
 		registeredUser.setUsername("marina");
 		UserDto user = new UserDto();
 		user.setUsername("marina");
 		user.setPassword("password");
 		when(userRepository.findByUsername("marina")).thenReturn(registeredUser);
-		Boolean result = userService.registerAdmin(user);
+		userService.registerAdmin(user);
+		/*
+		Exception result = userService.registerAdmin(user);
 		Assert.assertFalse(result);
+
+		 */
+
 	}
 
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void registerLibrarian_existingUsernameGiven() {
 		User registeredUser = new User();
 		registeredUser.setUsername("marina");
@@ -96,26 +102,26 @@ public class UserServiceImplTest {
 		user.setUsername("marina");
 		user.setPassword("password");
 		when(userRepository.findByUsername("marina")).thenReturn(registeredUser);
-		Boolean result = userService.registerLibrarian(user);
-		Assert.assertFalse(result);
+		userService.registerLibrarian(user);
 	}
 
 	@Test
-	public void registerAdmin_uniqueUsernameGiven() {
+	public void registerAdmin_uniqueUsernameGiven() throws Exception {
+
 		UserDto user = new UserDto();
 		user.setUsername("marina");
 		user.setPassword("password");
-		Boolean result = userService.registerAdmin(user);
-		Assert.assertTrue(result);
+		userService.registerAdmin(user);
 	}
 
 	@Test
 	public void registerLibrarian_uniqueUsernameGiven() {
+
 		UserDto user = new UserDto();
 		user.setUsername("marina");
 		user.setPassword("password");
-		Boolean result = userService.registerLibrarian(user);
-		Assert.assertTrue(result);
+		userService.registerLibrarian(user);
+
 	}
 
 }

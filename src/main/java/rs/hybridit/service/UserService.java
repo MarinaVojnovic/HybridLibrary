@@ -17,8 +17,8 @@ public interface UserService extends UserDetailsService {
 
 	User findUserByToken(String token);
 
-	Boolean registerLibrarian(UserDto user);
+	void registerLibrarian(UserDto user);
 
-	Boolean registerAdmin(UserDto user);
+	void registerAdmin(UserDto user) throws Exception;
 
 }

@@ -80,7 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		String jwt = tokenHelper.generateToken(user.getUsername());
 		int expiresIn = tokenHelper.getExpiredIn();
 		Role role = null;
-		if (user.getAuthority().getName().equals(Role.ADMIN)) {
+		if (user.getAuthority().getRole().equals(Role.ADMIN)) {
 			role = Role.ADMIN;
 		} else {
 			role = Role.LIBRARIAN;

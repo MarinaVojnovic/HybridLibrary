@@ -21,24 +21,24 @@ public class Authority implements GrantedAuthority {
 	private Long id;
 
 	@Enumerated(EnumType.STRING)
-	private Role name;
+	private Role role;
 
-	public Authority(Role name) {
-		this.name = name;
+	public Authority(Role role) {
+		this.role = role;
 	}
 
 	@Override
 	public String getAuthority() {
-		return name.name();
+		return role.name();
 	}
 
-	public void setName(Role name) {
-		this.name = name;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	@JsonIgnore
-	public Role getName() {
-		return name;
+	public Role getRole() {
+		return role;
 	}
 
 	@JsonIgnore
