@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,12 +32,14 @@ public class LibraryController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Library> create(@RequestBody @Valid LibraryDto libraryDto) {
 		Library library = libraryService.create(new Library(libraryDto));
 		return new ResponseEntity<>(library, HttpStatus.CREATED);
 	}
 
 	@GetMapping(value = "/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> getLibrary(@PathVariable Long id) {
 		Library library = libraryService.findById(id);
 		if (library != null) {
@@ -47,12 +50,14 @@ public class LibraryController {
 	}
 
 	@GetMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Library>> getLibraries() {
 		List<Library> libraries = libraryService.getAll();
 		return new ResponseEntity<>(libraries, HttpStatus.OK);
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> updateLibrary(@PathVariable Long id, @RequestBody @Valid LibraryDto libraryDto) {
 		Library library = libraryService.findById(id);
 		if (library != null) {
@@ -64,6 +69,7 @@ public class LibraryController {
 	}
 
 	@DeleteMapping(value = "/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> deleteLibrary(@PathVariable Long id) {
 		Library library = libraryService.findById(id);
 		if (library != null) {

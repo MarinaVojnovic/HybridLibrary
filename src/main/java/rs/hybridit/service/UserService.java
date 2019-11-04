@@ -1,9 +1,11 @@
 package rs.hybridit.service;
 
 import java.util.List;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import rs.hybridit.dto.UserDto;
 import rs.hybridit.model.User;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
 	User findById(long id);
 
@@ -13,6 +15,10 @@ public interface UserService {
 
 	void delete(User user);
 
-	User findByUsername(String username);
+	User findUserByToken(String token);
+
+	void registerLibrarian(UserDto user);
+
+	void registerAdmin(UserDto user) throws Exception;
 
 }
