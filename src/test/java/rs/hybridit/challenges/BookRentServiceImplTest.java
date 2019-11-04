@@ -1,6 +1,7 @@
 package rs.hybridit.challenges;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -136,8 +138,8 @@ public class BookRentServiceImplTest {
 
 	@Test
 	public void returnBookCopy_invalidIdGiven() {
-		Boolean result = bookRentService.returnBookCopy(1L);
-		Assert.assertFalse(result);
+		BookCopy result = bookRentService.returnBookCopy(1L).orElse(null);
+		assertNull(result);
 	}
 
 	@Test
@@ -147,8 +149,8 @@ public class BookRentServiceImplTest {
 		bookCopy.setRentStart(LocalDate.now().minusDays(5));
 		bookCopy.setRentEnd(LocalDate.now().plusDays(10));
 		bookCopy.setUser(new User());
-		when(bookCopyRepository.getOne(1L)).thenReturn(bookCopy);
-		Boolean result = bookRentService.returnBookCopy(1L);
+		when(bookCopyRepository.findById(1L)).thenReturn(Optional.of(bookCopy));
+		BookCopy result = bookRentService.returnBookCopy(1L).orElse(null);
 		Assert.assertTrue(true);
 	}
 

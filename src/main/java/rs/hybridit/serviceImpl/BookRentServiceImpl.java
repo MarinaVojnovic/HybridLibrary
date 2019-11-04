@@ -2,6 +2,8 @@ package rs.hybridit.serviceImpl;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,38 +41,44 @@ public class BookRentServiceImpl implements BookRentService {
 	@Override
 	public BookCopy rentBookCopy(Long bookId) {
 		Book book = bookRepository.findById(bookId).orElse(null);
-		List<BookCopy> availableBookCopies = findAvailableBookCopies(book);
-		if (availableBookCopies.isEmpty()) {
-			return null;
-		} else {
-			BookCopy bookCopy = availableBookCopies.get(0);
-			Library library = libraryRepository.findAll().get(0);
-			bookCopy.setRentStart(LocalDate.now());
-			bookCopy.setRentEnd(LocalDate.now().plusDays(library.getRentPeriod()));
-			book.setRentingCounter(book.getRentingCounter() + 1);
-			User user = (User) this.userRepository
-				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-			bookCopy.setUser(user);
-			return bookCopy;
+		if (book != null) {
+			List<BookCopy> availableBookCopies = findAvailableBookCopies(book);
+			if (availableBookCopies.isEmpty()) {
+				return null;
+			} else {
+				BookCopy bookCopy = availableBookCopies.get(0);
+				Library library = libraryRepository.findAll().get(0);
+				bookCopy.setRentStart(LocalDate.now());
+				bookCopy.setRentEnd(LocalDate.now().plusDays(library.getRentPeriod()));
+				book.setRentingCounter(book.getRentingCounter() + 1);
+				User user = (User) this.userRepository
+					.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+				bookCopy.setUser(user);
+				return bookCopy;
+			}
 		}
+		return null;
 	}
 
 	@Override
-	public Boolean returnBookCopy(Long bookCopyId) {
-		BookCopy bookCopy = bookCopyRepository.getOne(bookCopyId);
-		if (bookCopy != null) {
-			bookCopy.setRentStart(null);
-			bookCopy.setRentEnd(null);
-			bookCopy.setUser(null);
-			return true;
-		} else {
-			return false;
+	public Optional<BookCopy> returnBookCopy(Long bookCopyId) {
+		Optional<BookCopy> bookCopy = bookCopyRepository.findById(bookCopyId);
+		if (bookCopy.isPresent()) {
+			bookCopy.get().setRentStart(null);
+			bookCopy.get().setRentEnd(null);
+			bookCopy.get().setUser(null);
 		}
+		return bookCopy;
 	}
 
 	public List<BookCopy> findAvailableBookCopies(Book book) {
 		List<BookCopy> bookCopies = bookCopyRepository.findByBook(book);
-		return bookCopies.stream().filter(bc -> bc.getUser() == null).collect(Collectors.toList());
+		return bookCopies.stream().filter(bc -> isAvailable(bc)).collect(Collectors.toList());
+	}
+
+	private boolean isAvailable(BookCopy bookCopy) {
+		return Objects.isNull(bookCopy.getUser()) && Objects.isNull(bookCopy.getRentStart()) && Objects
+			.isNull(bookCopy.getRentEnd());
 	}
 
 }

@@ -1,5 +1,6 @@
 package rs.hybridit.controller;
 
+import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class BookRentController {
 	public ResponseEntity<?> rentBookCopy(Long bookId) {
 		BookCopy bookCopy = bookRentService.rentBookCopy(bookId);
 		if (bookCopy == null) {
-			return ResponseEntity.badRequest().body("No available copies");
+			return ResponseEntity.badRequest().body("No available copies for book with id " + bookId + " found.");
 		} else {
 			return new ResponseEntity<>(bookCopy, HttpStatus.OK);
 		}
@@ -34,11 +35,11 @@ public class BookRentController {
 	@GetMapping(value = "/return/{bookCopyId}")
 	@PreAuthorize("hasRole('ADMIN', 'LIBRARIAN')")
 	public ResponseEntity<?> returnBookCopy(Long bookCopyId) {
-		Boolean result = bookRentService.returnBookCopy(bookCopyId);
-		if (result == true) {
+		Optional<BookCopy> result = bookRentService.returnBookCopy(bookCopyId);
+		if (result.isPresent()) {
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			return ResponseEntity.badRequest().body("Invalid book copy id given.");
+			throw new IllegalArgumentException("Book copy with id " + bookCopyId + "not found.");
 		}
 	}
 
