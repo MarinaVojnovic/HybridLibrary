@@ -29,6 +29,7 @@ public class BookCopyServiceImplTest {
 	@Mock
 	private BookCopyRepository bookCopyRepository;
 
+
 	@Test
 	public void findById_ExistingIdGiven_ShouldBeSuccessfull() {
 		BookCopy bc = new BookCopy();

@@ -1,6 +1,7 @@
 package rs.hybridit.controller;
 
 
+import java.time.LocalDate;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,8 @@ import rs.hybridit.dto.BookCopyDto;
 import rs.hybridit.dto.BookDto;
 import rs.hybridit.model.Book;
 import rs.hybridit.model.BookCopy;
+import rs.hybridit.model.Library;
+import rs.hybridit.model.User;
 import rs.hybridit.service.BookCopyService;
 
 @RestController
