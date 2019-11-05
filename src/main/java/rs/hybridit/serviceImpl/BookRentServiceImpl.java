@@ -1,6 +1,8 @@
 package rs.hybridit.serviceImpl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -12,6 +14,8 @@ import rs.hybridit.exception.InvalidIdException;
 import rs.hybridit.model.Book;
 import rs.hybridit.model.BookCopy;
 import rs.hybridit.model.Library;
+import rs.hybridit.model.ReportCurrentlyRentedBooks;
+import rs.hybridit.model.ReportFrequency;
 import rs.hybridit.model.User;
 import rs.hybridit.repository.BookCopyRepository;
 import rs.hybridit.repository.BookRepository;
@@ -41,7 +45,6 @@ public class BookRentServiceImpl implements BookRentService {
 	}
 
 	public BookCopy rentBookCopy(Long bookId) {
-		log.info("Rent book copy called.");
 		return bookRepository.findById(bookId).map(this::getBookCopy).orElseThrow(() -> {
 			throw new InvalidIdException("Book with given id " + bookId + " does not exist.");
 		});
@@ -76,6 +79,32 @@ public class BookRentServiceImpl implements BookRentService {
 		}).orElseThrow(() -> {
 			throw new InvalidIdException("Book with given id " + bookCopyId + " does not exist.");
 		});
+	}
+
+	@Override
+	public List<ReportFrequency> getRentingStatistics() {
+		List<Book> books = bookRepository.findAll();
+		books.sort((a, b) -> b.getRentingCounter().compareTo(a.getRentingCounter()));
+		List<ReportFrequency> reports = new ArrayList<>();
+		for (Book b : books) {
+			reports.add(new ReportFrequency(b.getName(), b.getRentingCounter()));
+		}
+		return reports;
+	}
+
+	@Override
+	public List<ReportCurrentlyRentedBooks> getCurrentlyRentedBooksReport() {
+		List<Book> books = bookRepository.findAll();
+		List<ReportCurrentlyRentedBooks> currentlyRentedBooks = new ArrayList<>();
+		for (Book book : books) {
+			List<BookCopy> bookCopies = bookCopyRepository.findByBook(book);
+			int available = findAvailableBookCopies(book).size();
+			int rented = bookCopies.size() - available;
+			if (rented != 0) {
+				currentlyRentedBooks.add(new ReportCurrentlyRentedBooks(book.getName(), rented, available));
+			}
+		}
+		return currentlyRentedBooks;
 	}
 
 	public List<BookCopy> findAvailableBookCopies(Book book) {
