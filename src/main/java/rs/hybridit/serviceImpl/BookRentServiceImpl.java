@@ -49,7 +49,6 @@ public class BookRentServiceImpl implements BookRentService {
 
 	@Override
 	public BookCopy getBookCopy(Book book) {
-		log.debug("Get Book Copy, id of Original book: " + book.getId());
 		List<BookCopy> availableBookCopies = findAvailableBookCopies(book);
 		if (availableBookCopies.isEmpty()) {
 			throw new InvalidIdException("Book with given id " + book.getId() + " does not exist.");
@@ -68,16 +67,15 @@ public class BookRentServiceImpl implements BookRentService {
 
 	@Override
 	public Optional<BookCopy> returnBookCopy(Long bookCopyId) {
-		Optional<BookCopy> bookCopy = bookCopyRepository.findById(bookCopyId);
-		if (bookCopy.isPresent()) {
-			bookCopy.get().setRentStart(null);
-			bookCopy.get().setRentEnd(null);
-			bookCopy.get().setUser(null);
-			this.bookCopyRepository.save(bookCopy.get());
-			return bookCopy;
-		} else {
+		return bookCopyRepository.findById(bookCopyId).map(bookCopy -> {
+			bookCopy.setRentStart(null);
+			bookCopy.setRentEnd(null);
+			bookCopy.setUser(null);
+			this.bookCopyRepository.save(bookCopy);
+			return Optional.of(bookCopy);
+		}).orElseThrow(() -> {
 			throw new InvalidIdException("Book with given id " + bookCopyId + " does not exist.");
-		}
+		});
 	}
 
 	public List<BookCopy> findAvailableBookCopies(Book book) {

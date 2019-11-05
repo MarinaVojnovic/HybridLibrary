@@ -18,14 +18,12 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler({InvalidIdException.class})
 	public final ResponseEntity<?> handleException(InvalidIdException ex, WebRequest request) {
-		HttpHeaders headers = new HttpHeaders();
-		return handleInvalidIdException(ex, headers, HttpStatus.BAD_REQUEST, request);
+		return handleInvalidIdException(ex, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 
 	protected ResponseEntity<?> handleInvalidIdException(InvalidIdException ex, HttpHeaders headers, HttpStatus status,
 		WebRequest request) {
-		List<String> errors = Collections.singletonList(ex.getMessage());
-		return handleExceptionInternal(ex, errors, headers, status, request);
+		return handleExceptionInternal(ex, Collections.singletonList(ex.getMessage()), headers, status, request);
 	}
 
 	protected ResponseEntity<?> handleExceptionInternal(Exception ex, List<String> body, HttpHeaders headers,

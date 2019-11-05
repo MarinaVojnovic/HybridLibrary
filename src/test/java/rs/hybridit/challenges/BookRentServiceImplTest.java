@@ -19,6 +19,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import rs.hybridit.exception.InvalidIdException;
 import rs.hybridit.model.Book;
 import rs.hybridit.model.BookCopy;
 import rs.hybridit.model.Library;
@@ -54,8 +55,7 @@ public class BookRentServiceImplTest {
 	@Mock
 	Authentication authentication;
 
-
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = InvalidIdException.class)
 	public void rentBookCopy_noAvailableCopies() {
 		Book b = new Book();
 		b.setId(1L);
@@ -64,7 +64,6 @@ public class BookRentServiceImplTest {
 		verify(bookRepository).findById(1L);
 		//Assert.assertNull(bookCopy);
 	}
-
 
 	@Test
 	public void rentBookCopy_successfull() {
