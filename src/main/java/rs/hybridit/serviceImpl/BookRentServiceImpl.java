@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import rs.hybridit.exception.InvalidIdException;
 import rs.hybridit.model.Book;
 import rs.hybridit.model.BookCopy;
 import rs.hybridit.model.Library;
@@ -20,6 +20,7 @@ import rs.hybridit.repository.UserRepository;
 import rs.hybridit.service.BookRentService;
 
 @Service
+@Slf4j
 public class BookRentServiceImpl implements BookRentService {
 
 	private final BookCopyRepository bookCopyRepository;
@@ -30,6 +31,7 @@ public class BookRentServiceImpl implements BookRentService {
 
 	private final UserRepository userRepository;
 
+
 	public BookRentServiceImpl(BookCopyRepository bookCopyRepository, BookRepository bookRepository,
 		LibraryRepository libraryRepository, UserRepository userRepository) {
 		this.bookCopyRepository = bookCopyRepository;
@@ -38,26 +40,30 @@ public class BookRentServiceImpl implements BookRentService {
 		this.userRepository = userRepository;
 	}
 
-	@Override
 	public BookCopy rentBookCopy(Long bookId) {
-		Book book = bookRepository.findById(bookId).orElse(null);
-		if (book != null) {
-			List<BookCopy> availableBookCopies = findAvailableBookCopies(book);
-			if (availableBookCopies.isEmpty()) {
-				return null;
-			} else {
-				BookCopy bookCopy = availableBookCopies.get(0);
-				Library library = libraryRepository.findAll().get(0);
-				bookCopy.setRentStart(LocalDate.now());
-				bookCopy.setRentEnd(LocalDate.now().plusDays(library.getRentPeriod()));
-				book.setRentingCounter(book.getRentingCounter() + 1);
-				User user = (User) this.userRepository
-					.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-				bookCopy.setUser(user);
-				return bookCopy;
-			}
+		log.info("Rent book copy called.");
+		return bookRepository.findById(bookId).map(this::getBookCopy).orElseThrow(() -> {
+			throw new InvalidIdException("Book with given id " + bookId + " does not exist.");
+		});
+	}
+
+	@Override
+	public BookCopy getBookCopy(Book book) {
+		log.debug("Get Book Copy, id of Original book: " + book.getId());
+		List<BookCopy> availableBookCopies = findAvailableBookCopies(book);
+		if (availableBookCopies.isEmpty()) {
+			throw new InvalidIdException("Book with given id " + book.getId() + " does not exist.");
+		} else {
+			BookCopy bookCopy = availableBookCopies.get(0);
+			Library library = libraryRepository.findAll().get(0);
+			bookCopy.setRentStart(LocalDate.now());
+			bookCopy.setRentEnd(LocalDate.now().plusDays(library.getRentPeriod()));
+			book.increaseCounter();
+			User user = this.userRepository
+				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+			bookCopy.setUser(user);
+			return bookCopy;
 		}
-		return null;
 	}
 
 	@Override
@@ -67,8 +73,11 @@ public class BookRentServiceImpl implements BookRentService {
 			bookCopy.get().setRentStart(null);
 			bookCopy.get().setRentEnd(null);
 			bookCopy.get().setUser(null);
+			this.bookCopyRepository.save(bookCopy.get());
+			return bookCopy;
+		} else {
+			throw new InvalidIdException("Book with given id " + bookCopyId + " does not exist.");
 		}
-		return bookCopy;
 	}
 
 	public List<BookCopy> findAvailableBookCopies(Book book) {

@@ -33,7 +33,6 @@ import rs.hybridit.serviceImpl.BookRentServiceImpl;
 @RunWith(MockitoJUnitRunner.class)
 public class BookRentServiceImplTest {
 
-
 	@InjectMocks
 	private BookRentServiceImpl bookRentService;
 
@@ -55,15 +54,17 @@ public class BookRentServiceImplTest {
 	@Mock
 	Authentication authentication;
 
-	@Test
+
+	@Test(expected = IllegalArgumentException.class)
 	public void rentBookCopy_noAvailableCopies() {
 		Book b = new Book();
 		b.setId(1L);
 		when(bookRepository.findById(1L)).thenReturn(java.util.Optional.of(b));
 		BookCopy bookCopy = bookRentService.rentBookCopy(1L);
 		verify(bookRepository).findById(1L);
-		Assert.assertNull(bookCopy);
+		//Assert.assertNull(bookCopy);
 	}
+
 
 	@Test
 	public void rentBookCopy_successfull() {
@@ -116,6 +117,7 @@ public class BookRentServiceImplTest {
 		assertEquals(0, returnedBookCopies.size());
 	}
 
+
 	@Test
 	public void findAvailableBookCopies_successfull() {
 		Book b = new Book();
@@ -136,10 +138,10 @@ public class BookRentServiceImplTest {
 		assertEquals(2l, returnedBookCopies.get(0).getId().longValue());
 	}
 
-	@Test
+
+	@Test(expected = IllegalArgumentException.class)
 	public void returnBookCopy_invalidIdGiven() {
 		BookCopy result = bookRentService.returnBookCopy(1L).orElse(null);
-		assertNull(result);
 	}
 
 	@Test

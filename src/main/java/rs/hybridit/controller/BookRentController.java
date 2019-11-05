@@ -24,23 +24,13 @@ public class BookRentController {
 	@GetMapping(value = "/{bookId}")
 	@PreAuthorize("hasRole('ADMIN', 'LIBRARIAN')")
 	public ResponseEntity<?> rentBookCopy(Long bookId) {
-		BookCopy bookCopy = bookRentService.rentBookCopy(bookId);
-		if (bookCopy == null) {
-			return ResponseEntity.badRequest().body("No available copies for book with id " + bookId + " found.");
-		} else {
-			return new ResponseEntity<>(bookCopy, HttpStatus.OK);
-		}
+		return new ResponseEntity<>(bookRentService.rentBookCopy(bookId),HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/return/{bookCopyId}")
 	@PreAuthorize("hasRole('ADMIN', 'LIBRARIAN')")
 	public ResponseEntity<?> returnBookCopy(Long bookCopyId) {
-		Optional<BookCopy> result = bookRentService.returnBookCopy(bookCopyId);
-		if (result.isPresent()) {
-			return new ResponseEntity<>(result, HttpStatus.OK);
-		} else {
-			throw new IllegalArgumentException("Book copy with id " + bookCopyId + "not found.");
-		}
+		return new ResponseEntity<>(bookRentService.returnBookCopy(bookCopyId), HttpStatus.OK);
 	}
 
 }

@@ -52,5 +52,9 @@ public class Book {
 		this.rentingCounter = bookDto.getRentingCounter();
 	}
 
+	public void increaseCounter(){
+		this.rentingCounter++;
+	}
+
 }
 
