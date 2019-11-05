@@ -85,26 +85,30 @@ public class BookRentServiceImpl implements BookRentService {
 	public List<ReportFrequency> getRentingStatistics() {
 		List<Book> books = bookRepository.findAll();
 		books.sort((a, b) -> b.getRentingCounter().compareTo(a.getRentingCounter()));
-		List<ReportFrequency> reports = new ArrayList<>();
-		for (Book b : books) {
-			reports.add(new ReportFrequency(b.getName(), b.getRentingCounter()));
-		}
-		return reports;
+		return books.stream().map(this::makeReport).collect(Collectors.toList());
+	}
+
+	public ReportFrequency makeReport(Book book) {
+		return new ReportFrequency(book.getName(), book.getRentingCounter());
 	}
 
 	@Override
 	public List<ReportCurrentlyRentedBooks> getCurrentlyRentedBooksReport() {
-		List<Book> books = bookRepository.findAll();
-		List<ReportCurrentlyRentedBooks> currentlyRentedBooks = new ArrayList<>();
-		for (Book book : books) {
-			List<BookCopy> bookCopies = bookCopyRepository.findByBook(book);
-			int available = findAvailableBookCopies(book).size();
-			int rented = bookCopies.size() - available;
-			if (rented != 0) {
-				currentlyRentedBooks.add(new ReportCurrentlyRentedBooks(book.getName(), rented, available));
-			}
+		return bookRepository.findAll().stream()
+			.map(this::currentlyRentedBook)
+			.filter(Optional::isPresent)
+			.map(Optional::get)
+			.collect(Collectors.toList());
+	}
+
+	public Optional<ReportCurrentlyRentedBooks> currentlyRentedBook(Book book) {
+		List<BookCopy> bookCopies = bookCopyRepository.findByBook(book);
+		int available = findAvailableBookCopies(book).size();
+		int rented = bookCopies.size() - available;
+		if (rented != 0) {
+			return Optional.of(new ReportCurrentlyRentedBooks(book.getName(), rented, available));
 		}
-		return currentlyRentedBooks;
+		return Optional.empty();
 	}
 
 	public List<BookCopy> findAvailableBookCopies(Book book) {
