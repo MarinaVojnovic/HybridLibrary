@@ -1,5 +1,6 @@
 package rs.hybridit.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,9 @@ public class UserServiceImpl implements UserService {
 			throw new IllegalArgumentException("Username is already taken.");
 		}
 		User admin = new User(user);
-		admin.setAuthority(new Authority(Role.ADMIN));
+		List<Authority> authorities = new ArrayList<>();
+		authorities.add(new Authority(Role.ADMIN));
+		admin.setAuthorities(authorities);
 		admin.setPassword(this.passwordEncoder.encode(user.getPassword()));
 		create(admin);
 	}
@@ -45,7 +48,9 @@ public class UserServiceImpl implements UserService {
 			throw new IllegalArgumentException("Username is already taken.");
 		}
 		User librarian = new User(user);
-		librarian.setAuthority(new Authority(Role.LIBRARIAN));
+		List<Authority> authorities = new ArrayList<>();
+		authorities.add(new Authority(Role.LIBRARIAN));
+		librarian.setAuthorities(authorities);
 		librarian.setPassword(this.passwordEncoder.encode(user.getPassword()));
 		create(librarian);
 	}

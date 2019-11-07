@@ -30,14 +30,14 @@ public class UserController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<User> create(@RequestBody @Valid UserDto userDto) {
 		User user = userService.create(new User(userDto));
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
 
 	@GetMapping(value = "/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> getUser(@PathVariable Long id) {
 		User user = userService.findById(id);
 		if (user != null) {
@@ -48,14 +48,14 @@ public class UserController {
 	}
 
 	@GetMapping
-	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<User>> getUsers() {
 		List<User> users = userService.getAll();
 		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody @Valid UserDto userDto) {
 		User user = userService.findById(id);
 		if (user != null) {
@@ -72,7 +72,7 @@ public class UserController {
 	}
 
 	@DeleteMapping(value = "/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> deleteUser(@PathVariable Long id) {
 		User user = userService.findById(id);
 		if (user != null) {

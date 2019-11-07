@@ -1,5 +1,7 @@
 package rs.hybridit;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import rs.hybridit.auth.JwtAuthenticationRequest;
+import rs.hybridit.model.Authority;
 import rs.hybridit.model.Role;
 import rs.hybridit.model.User;
 import rs.hybridit.model.UserTokenState;
@@ -50,6 +53,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 			.authorizeRequests()
 			.antMatchers("/auth/login").permitAll()
+			.antMatchers("/auth/registerAdmin").permitAll()
+			//antMatchers("/auth/registerLibrarian").permitAll()
+			//.antMatchers("/books/**").permitAll()
+			//.antMatchers("/bookCopies/**").permitAll()
+			//.antMatchers("/users/**").permitAll()
+			//.antMatchers("/bookRent/**").permitAll()
 			// every request needs to be authorized
 			.anyRequest().authenticated().and()
 			// add filter before every request
@@ -88,7 +97,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		String jwt = tokenHelper.generateToken(user.getUsername());
 		int expiresIn = tokenHelper.getExpiredIn();
 		Role role = null;
-		if (user.getAuthority().getRole().equals(Role.ADMIN)) {
+		if (user.getAuthoitiesList().get(0).getRole().equals(Role.ADMIN)) {
 			role = Role.ADMIN;
 		} else {
 			role = Role.LIBRARIAN;

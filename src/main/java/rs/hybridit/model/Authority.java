@@ -8,10 +8,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 @Table(name = "authority")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Authority implements GrantedAuthority {
 
 	private static final long serialVersionUID = -3742453340543117722L;

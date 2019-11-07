@@ -34,12 +34,12 @@ public class AuthenticationController {
 	private UserService userService;
 
 	@PostMapping(value = "/registerAdmin")
-	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> registerAdmin(@RequestBody UserDto user) {
 
 		try{
 			this.userService.registerAdmin(user);
-			return new ResponseEntity<>(new MessageDto("Username is already taken.", "Error"), HttpStatus.CONFLICT);
+			return new ResponseEntity<>(new MessageDto("Admin successfully registrated.", "Success"), HttpStatus.OK);
 		}catch(Exception e){
 			return new ResponseEntity<>(new MessageDto(e.getMessage(), "Error"), HttpStatus.CONFLICT);
 		}
@@ -47,7 +47,7 @@ public class AuthenticationController {
 
 
 	@PostMapping(value = "/registerLibrarian")
-	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> registerLibrarian(@RequestBody UserDto user) {
 
 		try{
