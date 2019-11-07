@@ -20,4 +20,6 @@ public interface BookRentService {
 
 	List<ReportCurrentlyRentedBooks> getCurrentlyRentedBooksReport();
 
+	List<Book> findAllSortedRentingCounter();
+
 }

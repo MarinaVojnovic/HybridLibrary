@@ -10,12 +10,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.hibernate.mapping.Any;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -69,15 +71,16 @@ public class BookRentServiceImplTest {
 		b3.setName("Book 3");
 		b3.setRentingCounter(3);
 		List<Book> books = new ArrayList<>();
-		books.add(b2);
-		books.add(b1);
 		books.add(b3);
-		when(bookRepository.findAll()).thenReturn(books);
+		books.add(b1);
+		books.add(b2);
+		when(bookRepository.findAll(new Sort(Sort.Direction.ASC, "rentingCounter"))).thenReturn(books);
 		List<ReportFrequency> reports = new ArrayList<>();
 		for (Book b : books) {
 			reports.add(new ReportFrequency(b.getName(), b.getRentingCounter()));
 		}
 		List<ReportFrequency> returnedReports = bookRentService.getRentingStatistics();
+		assertEquals(3, returnedReports.size());
 		assertEquals(returnedReports.get(0).getBookName(), reports.get(0).getBookName());
 		assertEquals(returnedReports.get(1).getBookName(), reports.get(1).getBookName());
 		assertEquals(returnedReports.get(2).getBookName(), reports.get(2).getBookName());

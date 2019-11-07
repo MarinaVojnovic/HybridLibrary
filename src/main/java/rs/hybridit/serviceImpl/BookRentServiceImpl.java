@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import rs.hybridit.exception.InvalidIdException;
@@ -81,8 +82,7 @@ public class BookRentServiceImpl implements BookRentService {
 
 	@Override
 	public List<ReportFrequency> getRentingStatistics() {
-		List<Book> books = bookRepository.findAll();
-		books.sort((a, b) -> b.getRentingCounter().compareTo(a.getRentingCounter()));
+		List<Book> books = findAllSortedRentingCounter();
 		return books.stream().map(this::makeReport).collect(Collectors.toList());
 	}
 
@@ -113,5 +113,12 @@ public class BookRentServiceImpl implements BookRentService {
 			.isNull(bookCopy.getRentEnd());
 	}
 
+	public List<Book> findAllSortedRentingCounter() {
+		return bookRepository.findAll(sortByIdAsc());
+	}
+
+	private Sort sortByIdAsc() {
+		return new Sort(Sort.Direction.ASC, "rentingCounter");
+	}
 
 }
