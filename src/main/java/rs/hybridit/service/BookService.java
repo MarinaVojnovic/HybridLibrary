@@ -16,5 +16,7 @@ public interface BookService {
 
 	Book findByName(String name);
 
+	public List findAllOrderByRentingCounterDesc();
+
 }
 

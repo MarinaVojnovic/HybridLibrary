@@ -10,12 +10,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.hibernate.mapping.Any;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +25,8 @@ import rs.hybridit.exception.InvalidIdException;
 import rs.hybridit.model.Book;
 import rs.hybridit.model.BookCopy;
 import rs.hybridit.model.Library;
+import rs.hybridit.model.ReportCurrentlyRentedBooks;
+import rs.hybridit.model.ReportFrequency;
 import rs.hybridit.model.User;
 import rs.hybridit.repository.BookCopyRepository;
 import rs.hybridit.repository.BookRepository;
@@ -55,6 +59,40 @@ public class BookRentServiceImplTest {
 	@Mock
 	Authentication authentication;
 
+	@Test
+	public void getRentingStatistics_booksExist() {
+		Book b1 = new Book();
+		b1.setName("Book 1");
+		b1.setRentingCounter(5);
+		Book b2 = new Book();
+		b2.setName("Book 2");
+		b2.setRentingCounter(7);
+		Book b3 = new Book();
+		b3.setName("Book 3");
+		b3.setRentingCounter(3);
+		List<Book> books = new ArrayList<>();
+		books.add(b3);
+		books.add(b1);
+		books.add(b2);
+		when(bookRepository.findAll(new Sort(Sort.Direction.ASC, "rentingCounter"))).thenReturn(books);
+		List<ReportFrequency> reports = new ArrayList<>();
+		for (Book b : books) {
+			reports.add(new ReportFrequency(b.getName(), b.getRentingCounter()));
+		}
+		List<ReportFrequency> returnedReports = bookRentService.getRentingStatistics();
+		assertEquals(3, returnedReports.size());
+		assertEquals(returnedReports.get(0).getBookName(), reports.get(0).getBookName());
+		assertEquals(returnedReports.get(1).getBookName(), reports.get(1).getBookName());
+		assertEquals(returnedReports.get(2).getBookName(), reports.get(2).getBookName());
+	}
+
+	@Test
+	public void getRentingStatistics_booksDoNotExist() {
+		List<ReportFrequency> reports = new ArrayList<>();
+		List<ReportFrequency> returnedReports = bookRentService.getRentingStatistics();
+		assertEquals(reports, returnedReports);
+	}
+
 	@Test(expected = InvalidIdException.class)
 	public void rentBookCopy_noAvailableCopies() {
 		Book b = new Book();
@@ -62,8 +100,68 @@ public class BookRentServiceImplTest {
 		when(bookRepository.findById(1L)).thenReturn(java.util.Optional.of(b));
 		BookCopy bookCopy = bookRentService.rentBookCopy(1L);
 		verify(bookRepository).findById(1L);
-		//Assert.assertNull(bookCopy);
 	}
+
+	@Test
+	public void getCurrentlyRentedBooksReport_successfull() {
+		Book b1 = new Book();
+		b1.setName("Book 1");
+		Book b2 = new Book();
+		b2.setName("Book 2");
+		List<Book> rentedBooks = new ArrayList<>();
+		rentedBooks.add(b2);
+		rentedBooks.add(b1);
+		when(bookRepository.findAllRented()).thenReturn(rentedBooks);
+
+		BookCopy bookCopy11 = new BookCopy();
+		bookCopy11.setUser(new User());
+		BookCopy bookCopy12 = new BookCopy();
+		bookCopy12.setUser(new User());
+		BookCopy bookCopy13 = new BookCopy();
+		bookCopy13.setUser(null);
+		bookCopy13.setRentStart(null);
+		bookCopy13.setRentEnd(null);
+		List<BookCopy> bookCopies1 = new ArrayList<>();
+		bookCopies1.add(bookCopy11);
+		bookCopies1.add(bookCopy12);
+		bookCopies1.add(bookCopy13);
+		when(bookCopyRepository.findByBook(b1)).thenReturn(bookCopies1);
+
+		BookCopy bookCopy21 = new BookCopy();
+		BookCopy bookCopy22 = new BookCopy();
+		bookCopy21.setUser(new User());
+		bookCopy21.setRentStart(null);
+		bookCopy21.setRentEnd(null);
+		bookCopy22.setUser(null);
+		bookCopy22.setRentStart(null);
+		bookCopy22.setRentEnd(null);
+		List<BookCopy> bookCopies2 = new ArrayList<>();
+		bookCopies2.add(bookCopy21);
+		bookCopies2.add(bookCopy22);
+		when(bookCopyRepository.findByBook(b2)).thenReturn(bookCopies2);
+
+		List<ReportCurrentlyRentedBooks> currentlyRentedBooks = new ArrayList<>();
+		currentlyRentedBooks.add(new ReportCurrentlyRentedBooks(b1.getName(), 2, 1));
+		currentlyRentedBooks.add(new ReportCurrentlyRentedBooks(b2.getName(), 1, 1));
+
+		List<ReportCurrentlyRentedBooks> returnedCurrentlyRentedBooks =
+			bookRentService.getCurrentlyRentedBooksReport();
+		assertEquals(2, returnedCurrentlyRentedBooks.size());
+		assertEquals(b1.getName(), returnedCurrentlyRentedBooks.get(1).getBookName());
+		assertEquals(2, returnedCurrentlyRentedBooks.get(1).getRentedCopies().intValue());
+		assertEquals(1, returnedCurrentlyRentedBooks.get(1).getAvailableCopies().intValue());
+	}
+
+	@Test
+	public void getCurrentlyRentedBooksReport_noRentedBooks() {
+		List<Book> books = new ArrayList<>();
+		when(bookRepository.findAllRented()).thenReturn(books);
+		List<ReportCurrentlyRentedBooks> currentlyRentedBooks = new ArrayList<>();
+		List<ReportCurrentlyRentedBooks> returnedCurrentlyRentedBooks =
+			bookRentService.getCurrentlyRentedBooksReport();
+		assertEquals(currentlyRentedBooks, returnedCurrentlyRentedBooks);
+	}
+
 
 	@Test
 	public void rentBookCopy_successfull() {
@@ -115,7 +213,6 @@ public class BookRentServiceImplTest {
 		List<BookCopy> returnedBookCopies = bookRentService.findAvailableBookCopies(b);
 		assertEquals(0, returnedBookCopies.size());
 	}
-
 
 	@Test
 	public void findAvailableBookCopies_successfull() {

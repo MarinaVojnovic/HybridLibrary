@@ -2,6 +2,7 @@ package rs.hybridit.serviceImpl;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import rs.hybridit.model.Book;
 import rs.hybridit.repository.BookRepository;
@@ -39,6 +40,11 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public Book findByName(String name) {
 		return bookRepository.findByName(name);
+	}
+
+	@Override
+	public List findAllOrderByRentingCounterDesc() {
+		return bookRepository.findAll(new Sort(Sort.Direction.ASC, "rentingCounter"));
 	}
 
 }

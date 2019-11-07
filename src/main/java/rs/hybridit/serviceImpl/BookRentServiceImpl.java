@@ -6,12 +6,15 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import rs.hybridit.exception.InvalidIdException;
 import rs.hybridit.model.Book;
 import rs.hybridit.model.BookCopy;
 import rs.hybridit.model.Library;
+import rs.hybridit.model.ReportCurrentlyRentedBooks;
+import rs.hybridit.model.ReportFrequency;
 import rs.hybridit.model.User;
 import rs.hybridit.repository.BookCopyRepository;
 import rs.hybridit.repository.BookRepository;
@@ -41,7 +44,6 @@ public class BookRentServiceImpl implements BookRentService {
 	}
 
 	public BookCopy rentBookCopy(Long bookId) {
-		log.info("Rent book copy called.");
 		return bookRepository.findById(bookId).map(this::getBookCopy).orElseThrow(() -> {
 			throw new InvalidIdException("Book with given id " + bookId + " does not exist.");
 		});
@@ -78,6 +80,29 @@ public class BookRentServiceImpl implements BookRentService {
 		});
 	}
 
+	@Override
+	public List<ReportFrequency> getRentingStatistics() {
+		List<Book> books = findAllSortedRentingCounter();
+		return books.stream().map(this::makeReport).collect(Collectors.toList());
+	}
+
+	public ReportFrequency makeReport(Book book) {
+		return new ReportFrequency(book.getName(), book.getRentingCounter());
+	}
+
+	@Override
+	public List<ReportCurrentlyRentedBooks> getCurrentlyRentedBooksReport() {
+		return bookRepository.findAllRented().stream()
+			.map(this::currentlyRentedBook)
+			.collect(Collectors.toList());
+	}
+
+	public ReportCurrentlyRentedBooks currentlyRentedBook(Book book) {
+		List<BookCopy> bookCopies = bookCopyRepository.findByBook(book);
+		int available = bookCopies.stream().filter(bc -> isAvailable(bc)).collect(Collectors.toList()).size();
+		return new ReportCurrentlyRentedBooks(book.getName(), bookCopies.size() - available, available);
+	}
+
 	public List<BookCopy> findAvailableBookCopies(Book book) {
 		List<BookCopy> bookCopies = bookCopyRepository.findByBook(book);
 		return bookCopies.stream().filter(bc -> isAvailable(bc)).collect(Collectors.toList());
@@ -86,6 +111,14 @@ public class BookRentServiceImpl implements BookRentService {
 	private boolean isAvailable(BookCopy bookCopy) {
 		return Objects.isNull(bookCopy.getUser()) && Objects.isNull(bookCopy.getRentStart()) && Objects
 			.isNull(bookCopy.getRentEnd());
+	}
+
+	public List<Book> findAllSortedRentingCounter() {
+		return bookRepository.findAll(sortByIdAsc());
+	}
+
+	private Sort sortByIdAsc() {
+		return new Sort(Sort.Direction.ASC, "rentingCounter");
 	}
 
 }
