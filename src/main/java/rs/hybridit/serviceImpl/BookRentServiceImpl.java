@@ -1,8 +1,6 @@
 package rs.hybridit.serviceImpl;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -94,21 +92,15 @@ public class BookRentServiceImpl implements BookRentService {
 
 	@Override
 	public List<ReportCurrentlyRentedBooks> getCurrentlyRentedBooksReport() {
-		return bookRepository.findAll().stream()
+		return bookRepository.findAllRented().stream()
 			.map(this::currentlyRentedBook)
-			.filter(Optional::isPresent)
-			.map(Optional::get)
 			.collect(Collectors.toList());
 	}
 
-	public Optional<ReportCurrentlyRentedBooks> currentlyRentedBook(Book book) {
+	public ReportCurrentlyRentedBooks currentlyRentedBook(Book book) {
 		List<BookCopy> bookCopies = bookCopyRepository.findByBook(book);
-		int available = findAvailableBookCopies(book).size();
-		int rented = bookCopies.size() - available;
-		if (rented != 0) {
-			return Optional.of(new ReportCurrentlyRentedBooks(book.getName(), rented, available));
-		}
-		return Optional.empty();
+		int available = bookCopies.stream().filter(bc -> isAvailable(bc)).collect(Collectors.toList()).size();
+		return new ReportCurrentlyRentedBooks(book.getName(), bookCopies.size() - available, available);
 	}
 
 	public List<BookCopy> findAvailableBookCopies(Book book) {
@@ -120,5 +112,6 @@ public class BookRentServiceImpl implements BookRentService {
 		return Objects.isNull(bookCopy.getUser()) && Objects.isNull(bookCopy.getRentStart()) && Objects
 			.isNull(bookCopy.getRentEnd());
 	}
+
 
 }

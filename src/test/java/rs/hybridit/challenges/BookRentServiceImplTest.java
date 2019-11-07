@@ -105,10 +105,10 @@ public class BookRentServiceImplTest {
 		b1.setName("Book 1");
 		Book b2 = new Book();
 		b2.setName("Book 2");
-		List<Book> books = new ArrayList<>();
-		books.add(b2);
-		books.add(b1);
-		when(bookRepository.findAll()).thenReturn(books);
+		List<Book> rentedBooks = new ArrayList<>();
+		rentedBooks.add(b2);
+		rentedBooks.add(b1);
+		when(bookRepository.findAllRented()).thenReturn(rentedBooks);
 
 		BookCopy bookCopy11 = new BookCopy();
 		bookCopy11.setUser(new User());
@@ -126,7 +126,7 @@ public class BookRentServiceImplTest {
 
 		BookCopy bookCopy21 = new BookCopy();
 		BookCopy bookCopy22 = new BookCopy();
-		bookCopy21.setUser(null);
+		bookCopy21.setUser(new User());
 		bookCopy21.setRentStart(null);
 		bookCopy21.setRentEnd(null);
 		bookCopy22.setUser(null);
@@ -139,55 +139,26 @@ public class BookRentServiceImplTest {
 
 		List<ReportCurrentlyRentedBooks> currentlyRentedBooks = new ArrayList<>();
 		currentlyRentedBooks.add(new ReportCurrentlyRentedBooks(b1.getName(), 2, 1));
+		currentlyRentedBooks.add(new ReportCurrentlyRentedBooks(b2.getName(), 1, 1));
 
 		List<ReportCurrentlyRentedBooks> returnedCurrentlyRentedBooks =
 			bookRentService.getCurrentlyRentedBooksReport();
-		assertEquals(1, returnedCurrentlyRentedBooks.size());
-		assertEquals(b1.getName(), returnedCurrentlyRentedBooks.get(0).getBookName());
-		assertEquals(2, returnedCurrentlyRentedBooks.get(0).getRentedCopies().intValue());
-		assertEquals(1, returnedCurrentlyRentedBooks.get(0).getAvailableCopies().intValue());
+		assertEquals(2, returnedCurrentlyRentedBooks.size());
+		assertEquals(b1.getName(), returnedCurrentlyRentedBooks.get(1).getBookName());
+		assertEquals(2, returnedCurrentlyRentedBooks.get(1).getRentedCopies().intValue());
+		assertEquals(1, returnedCurrentlyRentedBooks.get(1).getAvailableCopies().intValue());
 	}
-
 
 	@Test
 	public void getCurrentlyRentedBooksReport_noRentedBooks() {
-		Book b1 = new Book();
-		b1.setName("Book 1");
-		b1.setRentingCounter(5);
-		Book b2 = new Book();
-		b2.setName("Book 2");
-		b2.setRentingCounter(7);
 		List<Book> books = new ArrayList<>();
-		books.add(b2);
-		books.add(b1);
-		when(bookRepository.findAll()).thenReturn(books);
-
-		BookCopy bookCopy11 = new BookCopy();
-		bookCopy11.setUser(null);
-		BookCopy bookCopy12 = new BookCopy();
-		bookCopy12.setUser(null);
-		BookCopy bookCopy13 = new BookCopy();
-		bookCopy13.setUser(null);
-		List<BookCopy> bookCopies1 = new ArrayList<>();
-		bookCopies1.add(bookCopy11);
-		bookCopies1.add(bookCopy12);
-		bookCopies1.add(bookCopy13);
-		when(bookCopyRepository.findByBook(b1)).thenReturn(bookCopies1);
-
-		BookCopy bookCopy21 = new BookCopy();
-		BookCopy bookCopy22 = new BookCopy();
-		bookCopy21.setUser(null);
-		bookCopy22.setUser(null);
-		List<BookCopy> bookCopies2 = new ArrayList<>();
-		bookCopies2.add(bookCopy21);
-		bookCopies2.add(bookCopy22);
-		when(bookCopyRepository.findByBook(b2)).thenReturn(bookCopies2);
-
+		when(bookRepository.findAllRented()).thenReturn(books);
 		List<ReportCurrentlyRentedBooks> currentlyRentedBooks = new ArrayList<>();
 		List<ReportCurrentlyRentedBooks> returnedCurrentlyRentedBooks =
 			bookRentService.getCurrentlyRentedBooksReport();
 		assertEquals(currentlyRentedBooks, returnedCurrentlyRentedBooks);
 	}
+
 
 	@Test
 	public void rentBookCopy_successfull() {
