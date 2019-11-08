@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.hybridit.dto.BookDto;
 import rs.hybridit.dto.LibraryDto;
 import rs.hybridit.model.Book;
+import rs.hybridit.model.BookCopy;
 import rs.hybridit.model.Library;
 import rs.hybridit.service.BookService;
 
@@ -77,9 +78,11 @@ public class BookController {
 		return ResponseEntity.badRequest().body("Book with given id does not exist");
 	}
 
+	/*
 	@DeleteMapping(value = "/{id}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> deleteBook(@PathVariable Long id) {
+
 		Book book = bookService.findById(id);
 		if (book != null) {
 			bookService.delete(book);
@@ -87,6 +90,10 @@ public class BookController {
 		} else {
 			return ResponseEntity.badRequest().body("Book with given id does not exist.");
 		}
+
+
 	}
+
+	 */
 
 }

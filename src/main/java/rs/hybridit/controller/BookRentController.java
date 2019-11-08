@@ -8,11 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import rs.hybridit.model.Book;
 import rs.hybridit.model.BookCopy;
 import rs.hybridit.model.ReportCurrentlyRentedBooks;
@@ -51,6 +47,17 @@ public class BookRentController {
 	@PreAuthorize("hasRole('ROLE_LIBRARIAN') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<ReportCurrentlyRentedBooks>> getCurrentlyRentedBooks() {
 		return new ResponseEntity<>(bookRentService.getCurrentlyRentedBooksReport(), HttpStatus.OK);
+	}
+
+	@DeleteMapping(value = "/deleteBook/{id}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<?> deleteBook(@PathVariable Long id) {
+		Boolean result = bookRentService.deleteBookCopy(id);
+		if (result == true){
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}else {
+			return ResponseEntity.badRequest().body("Book with given id cannot be deleted because there are copies rented..");
+		}
 	}
 
 }
