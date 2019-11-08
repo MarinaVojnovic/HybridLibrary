@@ -30,23 +30,25 @@ public class BookRentController {
 	}
 
 	@GetMapping(value = "/{bookId}")
-	@PreAuthorize("hasRole('ROLE_ADMIN', 'ROLE_LIBRARIAN')")
+	@PreAuthorize("hasRole('ROLE_LIBRARIAN') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> rentBookCopy(Long bookId) {
 		return new ResponseEntity<>(bookRentService.rentBookCopy(bookId), HttpStatus.OK);
 	}
 
 	@PutMapping(value = "/return/{bookCopyId}")
-	@PreAuthorize("hasRole('ROLE_ADMIN', 'ROLE_LIBRARIAN')")
+	@PreAuthorize("hasRole('ROLE_LIBRARIAN') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> returnBookCopy(Long bookCopyId) {
 		return new ResponseEntity<>(bookRentService.returnBookCopy(bookCopyId), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/statistics")
+	@PreAuthorize("hasRole('ROLE_LIBRARIAN') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<ReportFrequency>> getRentingStatistics() {
 		return new ResponseEntity<>(bookRentService.getRentingStatistics(), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/currentlyRentedBooks")
+	@PreAuthorize("hasRole('ROLE_LIBRARIAN') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<ReportCurrentlyRentedBooks>> getCurrentlyRentedBooks() {
 		return new ResponseEntity<>(bookRentService.getCurrentlyRentedBooksReport(), HttpStatus.OK);
 	}

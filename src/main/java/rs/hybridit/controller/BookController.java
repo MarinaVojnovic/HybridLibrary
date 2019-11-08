@@ -42,7 +42,7 @@ public class BookController {
 	}
 
 	@GetMapping(value = "/{id}")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_LIBRARIAN') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> getBook(@PathVariable Long id) {
 		Book book = bookService.findById(id);
 		if (book != null) {
@@ -53,7 +53,7 @@ public class BookController {
 	}
 
 	@GetMapping
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_LIBRARIAN') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<Book>> getBooks() {
 		log.info("get books called");
 		List<Book> books = bookService.getAll();
