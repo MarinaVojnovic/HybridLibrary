@@ -22,4 +22,6 @@ public interface BookRentService {
 
 	List<Book> findAllSortedRentingCounter();
 
+	public Boolean deleteBookCopy(Long id);
+
 }

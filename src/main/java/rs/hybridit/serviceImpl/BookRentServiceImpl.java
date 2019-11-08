@@ -122,4 +122,19 @@ public class BookRentServiceImpl implements BookRentService {
 		return new Sort(Sort.Direction.ASC, "rentingCounter");
 	}
 
+	public Boolean deleteBookCopy(Long id) {
+		Optional<Book> book = bookRepository.findById(id);
+		if (book.isPresent()) {
+			List<BookCopy> bookCopies = bookCopyRepository.findByBook(book.get());
+			List<BookCopy> availableBookCopies = findAvailableBookCopies(book.get());
+			if (bookCopies.size()==availableBookCopies.size()){
+				bookRepository.delete(book.get());
+				return true;
+			}
+		} else {
+			 throw new InvalidIdException("Book with given id " + id + " does not exist.");
+		}
+		return false;
+	}
+
 }

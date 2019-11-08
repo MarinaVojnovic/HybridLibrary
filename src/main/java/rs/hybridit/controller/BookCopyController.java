@@ -77,6 +77,9 @@ public class BookCopyController {
 	public ResponseEntity<?> deleteBookCopy(@PathVariable Long id) {
 		BookCopy bookCopy = bookCopyService.findById(id);
 		if (bookCopy != null) {
+			if (bookCopy.getUser()!=null) {
+				return ResponseEntity.badRequest().body("Book copy is rented and therefore can't be deleted.");
+			}
 			bookCopyService.delete(bookCopy);
 			return new ResponseEntity<>(bookCopy, HttpStatus.OK);
 		} else {
