@@ -53,7 +53,7 @@ public class BookRentServiceImpl implements BookRentService {
 	public BookCopy getBookCopy(Book book) {
 		List<BookCopy> availableBookCopies = findAvailableBookCopies(book);
 		if (availableBookCopies.isEmpty()) {
-			throw new InvalidIdException("Book with given id " + book.getId() + " does not exist.");
+			throw new InvalidIdException("Available book with given id " + book.getId() + " does not exist.");
 		} else {
 			BookCopy bookCopy = availableBookCopies.get(0);
 			Library library = libraryRepository.findAll().get(0);
@@ -63,6 +63,7 @@ public class BookRentServiceImpl implements BookRentService {
 			User user = this.userRepository
 				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 			bookCopy.setUser(user);
+			bookCopyRepository.save(bookCopy);
 			return bookCopy;
 		}
 	}

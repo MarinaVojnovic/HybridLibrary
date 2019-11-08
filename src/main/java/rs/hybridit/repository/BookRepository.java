@@ -12,9 +12,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
 	@Query(nativeQuery = true, value =
 		"SELECT * FROM dbhybridlibrary.books b left join dbhybridlibrary.book_copies bc on b.id = bc.book_id"
-			+ "and bc.user_id is not null"
-			+ "and bc.rent_start is not null"
-			+ "and bc.rent_end is not null;")
+			+ " where bc.user_id is not null"
+			+ " and bc.rent_start is not null"
+			+ " and bc.rent_end is not null;")
 	List<Book> findAllRented();
 
 }

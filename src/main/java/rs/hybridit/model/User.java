@@ -40,6 +40,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User implements UserDetails {
 
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -57,8 +59,10 @@ public class User implements UserDetails {
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	private Set<BookCopy> bookCopies = new HashSet<BookCopy>();
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Authority authority;
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "user_authority", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+	private List<Authority> authorities = new ArrayList<>();
+
 
 	public User(UserDto userDto) {
 
@@ -72,19 +76,14 @@ public class User implements UserDetails {
 
 	}
 
-	public Authority getAuhtority() {
-		return this.authority;
-	}
-
-	public void setAuthority(Authority authority) {
-		this.authority = authority;
-	}
-
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+		return authorities;
 	}
 
+	public List<Authority> getAuthoitiesList(){
+		return  authorities;
+	}
 	@JsonIgnore
 	@Override
 	public boolean isAccountNonExpired() {

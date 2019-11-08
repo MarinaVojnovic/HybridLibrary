@@ -2,6 +2,7 @@ package rs.hybridit.security;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,15 +36,13 @@ public class TokenHelper {
 
 	private final static int EXPIRING_CONST = 100;
 
-	// Functions for generating new JWT token
 	public String generateToken(String username) {
-		return Jwts.builder().setIssuer(APP_NAME).setSubject(username)
-			.setIssuedAt(java.sql.Date.valueOf(LocalDate.now()))
-			.setExpiration(generateExpirationDate()).signWith(SIGNATURE_ALGORITHM, SECRET).compact();
+		return Jwts.builder().setIssuer(APP_NAME).setSubject(username).setIssuedAt(new Date())
+				.setExpiration(generateExpirationDate()).signWith(SIGNATURE_ALGORITHM, SECRET).compact();
 	}
 
 	private Date generateExpirationDate() {
-		return new Date(java.sql.Date.valueOf(LocalDate.now()).getTime() + this.EXPIRES_IN * EXPIRING_CONST);
+		return Date.from( LocalDateTime.now().plusMinutes(EXPIRES_IN).atZone( ZoneId.systemDefault()).toInstant());
 	}
 
 	// Functions for refreshing JWT token

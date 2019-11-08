@@ -36,14 +36,14 @@ public class BookCopyController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<BookCopy> create(@RequestBody BookCopyDto bookCopyDto) {
 		BookCopy bookCopy = new BookCopy(bookCopyDto);
 		return new ResponseEntity<>(bookCopy, HttpStatus.CREATED);
 	}
 
 	@GetMapping(value = "/{id}")
-	@PreAuthorize("hasRole('ADMIN', 'LIBRARIAN')")
+	@PreAuthorize("hasRole('ROLE_LIBRARIAN') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> getBookCopy(@PathVariable Long id) {
 		BookCopy bookCopy = bookCopyService.findById(id);
 		if (bookCopy != null) {
@@ -54,14 +54,14 @@ public class BookCopyController {
 	}
 
 	@GetMapping
-	@PreAuthorize("hasRole('ADMIN', 'LIBRARIAN')")
+	@PreAuthorize("hasRole('ROLE_LIBRARIAN') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<BookCopy>> getBookCopys() {
 		List<BookCopy> bookCopies = bookCopyService.getAll();
 		return new ResponseEntity<>(bookCopies, HttpStatus.OK);
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> updateBookCopy(@PathVariable Long id, @RequestBody BookCopyDto bookCopyDto) {
 		BookCopy bookCopy = bookCopyService.findById(id);
 		if (bookCopy != null) {
@@ -73,7 +73,7 @@ public class BookCopyController {
 	}
 
 	@DeleteMapping(value = "/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> deleteBookCopy(@PathVariable Long id) {
 		BookCopy bookCopy = bookCopyService.findById(id);
 		if (bookCopy != null) {

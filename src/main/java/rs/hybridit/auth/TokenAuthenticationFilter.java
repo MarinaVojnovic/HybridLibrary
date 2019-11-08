@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +19,7 @@ import rs.hybridit.security.TokenHelper;
 Filter that intercepts every request from client to server, except paths listed in WebSecurityConfig.configure
 (WebSecurity web)
  */
+@Slf4j
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
 	private TokenHelper tokenHelper;
@@ -35,10 +37,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
 		String username;
 		String authToken = tokenHelper.getToken(request);
-
+		log.info(authToken);
 		if (authToken != null) {
 			username = tokenHelper.getUsernameFromToken(authToken);
-
+			log.info(username);
 			if (username != null) {
 				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 				if (tokenHelper.validateToken(authToken, userDetails)) {

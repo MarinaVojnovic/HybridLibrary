@@ -9,6 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.hybridit.model.Book;
@@ -28,23 +30,25 @@ public class BookRentController {
 	}
 
 	@GetMapping(value = "/{bookId}")
-	@PreAuthorize("hasRole('ADMIN', 'LIBRARIAN')")
+	@PreAuthorize("hasRole('ROLE_LIBRARIAN') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> rentBookCopy(Long bookId) {
 		return new ResponseEntity<>(bookRentService.rentBookCopy(bookId), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/return/{bookCopyId}")
-	@PreAuthorize("hasRole('ADMIN', 'LIBRARIAN')")
+	@PutMapping(value = "/return/{bookCopyId}")
+	@PreAuthorize("hasRole('ROLE_LIBRARIAN') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> returnBookCopy(Long bookCopyId) {
 		return new ResponseEntity<>(bookRentService.returnBookCopy(bookCopyId), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/statistics")
+	@PreAuthorize("hasRole('ROLE_LIBRARIAN') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<ReportFrequency>> getRentingStatistics() {
 		return new ResponseEntity<>(bookRentService.getRentingStatistics(), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/currentlyRentedBooks")
+	@PreAuthorize("hasRole('ROLE_LIBRARIAN') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<ReportCurrentlyRentedBooks>> getCurrentlyRentedBooks() {
 		return new ResponseEntity<>(bookRentService.getCurrentlyRentedBooksReport(), HttpStatus.OK);
 	}

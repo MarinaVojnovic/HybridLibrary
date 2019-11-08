@@ -3,6 +3,7 @@ package rs.hybridit.controller;
 
 import java.util.List;
 import javax.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import rs.hybridit.service.BookService;
 
 @RestController
 @RequestMapping(value = "/books", produces = MediaType.APPLICATION_JSON_VALUE)
+@Slf4j
 public class BookController {
 
 	private BookService bookService;
@@ -33,14 +35,14 @@ public class BookController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Book> create(@RequestBody @Valid BookDto bookDto) {
 		Book book = bookService.create(new Book(bookDto));
 		return new ResponseEntity<>(book, HttpStatus.CREATED);
 	}
 
 	@GetMapping(value = "/{id}")
-	@PreAuthorize("hasRole('USER', 'LIBRARIAN')")
+	@PreAuthorize("hasRole('ROLE_LIBRARIAN') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> getBook(@PathVariable Long id) {
 		Book book = bookService.findById(id);
 		if (book != null) {
@@ -51,14 +53,15 @@ public class BookController {
 	}
 
 	@GetMapping
-	@PreAuthorize("hasRole('USER', 'LIBRARIAN')")
+	@PreAuthorize("hasRole('ROLE_LIBRARIAN') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<Book>> getBooks() {
+		log.info("get books called");
 		List<Book> books = bookService.getAll();
 		return new ResponseEntity<>(books, HttpStatus.OK);
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> updateBook(@PathVariable Long id, @RequestBody @Valid BookDto bookDto) {
 		Book book = bookService.findById(id);
 		if (book != null) {
@@ -68,13 +71,14 @@ public class BookController {
 			book.setRentingCounter(bookDto.getRentingCounter());
 			book.setImage(bookDto.getImage());
 			book.setBookCopies(bookDto.getBookCopies());
+			bookService.create(book);
 			return new ResponseEntity<>(book, HttpStatus.OK);
 		}
 		return ResponseEntity.badRequest().body("Book with given id does not exist");
 	}
 
 	@DeleteMapping(value = "/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> deleteBook(@PathVariable Long id) {
 		Book book = bookService.findById(id);
 		if (book != null) {
