@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 		}
 		User admin = new User(user);
 		List<Authority> authorities = new ArrayList<>();
-		authorities.add(new Authority(Role.ADMIN));
+		authorities.add(new Authority(Role.ROLE_ADMIN));
 		admin.setAuthorities(authorities);
 		admin.setPassword(this.passwordEncoder.encode(user.getPassword()));
 		create(admin);
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
 		}
 		User librarian = new User(user);
 		List<Authority> authorities = new ArrayList<>();
-		authorities.add(new Authority(Role.LIBRARIAN));
+		authorities.add(new Authority(Role.ROLE_LIBRARIAN));
 		librarian.setAuthorities(authorities);
 		librarian.setPassword(this.passwordEncoder.encode(user.getPassword()));
 		create(librarian);

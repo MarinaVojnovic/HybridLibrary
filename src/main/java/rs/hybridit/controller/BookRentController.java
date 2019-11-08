@@ -30,13 +30,13 @@ public class BookRentController {
 	}
 
 	@GetMapping(value = "/{bookId}")
-	//@PreAuthorize("hasRole('ADMIN', 'LIBRARIAN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN', 'ROLE_LIBRARIAN')")
 	public ResponseEntity<?> rentBookCopy(Long bookId) {
 		return new ResponseEntity<>(bookRentService.rentBookCopy(bookId), HttpStatus.OK);
 	}
 
 	@PutMapping(value = "/return/{bookCopyId}")
-	//@PreAuthorize("hasRole('ADMIN', 'LIBRARIAN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN', 'ROLE_LIBRARIAN')")
 	public ResponseEntity<?> returnBookCopy(Long bookCopyId) {
 		return new ResponseEntity<>(bookRentService.returnBookCopy(bookCopyId), HttpStatus.OK);
 	}

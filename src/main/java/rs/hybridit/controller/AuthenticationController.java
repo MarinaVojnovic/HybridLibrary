@@ -34,7 +34,7 @@ public class AuthenticationController {
 	private UserService userService;
 
 	@PostMapping(value = "/registerAdmin")
-	//@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> registerAdmin(@RequestBody UserDto user) {
 
 		try{
@@ -47,7 +47,7 @@ public class AuthenticationController {
 
 
 	@PostMapping(value = "/registerLibrarian")
-	//@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> registerLibrarian(@RequestBody UserDto user) {
 
 		try{

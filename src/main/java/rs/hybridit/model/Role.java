@@ -1,6 +1,6 @@
 package rs.hybridit.model;
 
 public enum Role {
-	ADMIN,
-	LIBRARIAN
+	ROLE_ADMIN,
+	ROLE_LIBRARIAN
 }

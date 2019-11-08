@@ -40,6 +40,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User implements UserDetails {
 
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	private Long id;

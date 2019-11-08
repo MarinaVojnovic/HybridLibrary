@@ -35,14 +35,14 @@ public class BookController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	//@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Book> create(@RequestBody @Valid BookDto bookDto) {
 		Book book = bookService.create(new Book(bookDto));
 		return new ResponseEntity<>(book, HttpStatus.CREATED);
 	}
 
 	@GetMapping(value = "/{id}")
-	//@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> getBook(@PathVariable Long id) {
 		Book book = bookService.findById(id);
 		if (book != null) {
@@ -53,7 +53,7 @@ public class BookController {
 	}
 
 	@GetMapping
-	@PreAuthorize("hasRole('LIBRARIAN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<Book>> getBooks() {
 		log.info("get books called");
 		List<Book> books = bookService.getAll();
@@ -61,7 +61,7 @@ public class BookController {
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	//@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> updateBook(@PathVariable Long id, @RequestBody @Valid BookDto bookDto) {
 		Book book = bookService.findById(id);
 		if (book != null) {
@@ -78,7 +78,7 @@ public class BookController {
 	}
 
 	@DeleteMapping(value = "/{id}")
-	//@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> deleteBook(@PathVariable Long id) {
 		Book book = bookService.findById(id);
 		if (book != null) {
